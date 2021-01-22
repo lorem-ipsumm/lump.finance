@@ -6,7 +6,12 @@
     "test": "test"
   },
   "scripts": {
-    "test": "hardhat test"
+    "test": "hardhat test --network localhost",
+    "node": "hardhat node",
+    "fork": "hardhat node --fork https://mainnet.infura.io/v3/ba80b08e962a4d3b97bf1f61b5e057b2",
+    "compile": "hardhat compile",
+    "frontend": "cd frontend && npm start",
+    "deploy": "npx hardhat run scripts/deploy.js --network localhost"
   },
   "repository": {
     "type": "git",
@@ -31,5 +36,11 @@
     "ethers": "^5.0.0",
     "hardhat": "^2.0.4",
     "husky": "^4.2.5"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.3.0",
+    "@studydefi/money-legos": "^2.4.1",
+    "@uniswap/sdk": "^3.0.3",
+    "dotenv": "^8.2.0"
   }
 }

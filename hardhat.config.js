@@ -6,5 +6,25 @@ require("@nomiclabs/hardhat-waffle");
 require("./tasks/faucet");
 
 module.exports = {
-  solidity: "0.7.3"
+  solidity: {
+    version: "0.7.0"
+  },
+  defaultNetwork: "hardhat",
+  networks: {
+    hardhat: {
+      chainId: 1337,
+      /*
+      forking: {
+        url: "https://mainnet.infura.io/v3/ba80b08e962a4d3b97bf1f61b5e057b2"
+      }
+      */
+    }
+  },
+  /*
+  networks: {
+    hardhat: {
+      chainId: 1337
+    }
+  }
+  */
 };
