@@ -1,0 +1,166 @@
+.creator-wrapper {
+    width: 60%;
+    height: auto;
+    background-color: #EFEFEF;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.17);
+    transition: all ease 0.3s;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.creator-header{ 
+    background-color: black;
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    padding: 10px 30px;
+
+    .register {
+        color: white;
+        text-align: right;
+    }
+}
+
+.creator-profile{
+    background-color: white;
+    display: flex;
+    padding: 20px;
+
+    .creator-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .creator-name {
+            font-size: 16pt;
+        }
+
+        & div {
+            margin: 5px 0px;
+        }
+    }
+
+    .info-top {
+       font-weight: bold; 
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        margin-right: 20px;
+        box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
+    }
+}
+
+.creator-middle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 30px;
+
+    .middle-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .middle-text {
+        background: #E5E5E5;
+        padding: 5px;
+        min-height: 170px;
+        max-height: 170px;
+        display: flex;
+        justify-content: center;
+        margin: 0 15px;
+        padding: 20px;
+        color: #141414;
+        overflow-y: auto;
+        line-height: 1.5em;
+        a {
+            color: #141414;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            text-decoration: underline;
+            font-size: 12pt;
+            display: flex;
+            // justify-content: center;
+            // align-items: center;
+            flex-direction: column;
+            li {
+                // margin: 8px 0;
+                margin-bottom: 7px;
+            }
+        }
+    }
+
+    .creator-links {
+        flex: 1;
+        
+    }
+
+    .creator-explain{
+        flex: 2;
+
+        
+    }
+}
+
+.creator-actions {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content:space-between;
+
+    *{
+        flex: 1;
+        height: 100%;
+    }
+
+    .button-wrapper{
+        flex: 2;
+        display: flex;
+    }
+
+    button{
+        border: none;
+        color: white;
+        font-size: 15pt;
+        transition: all ease 0.1s;
+        flex: 1;
+        &:hover{
+            filter: brightness(90%);
+        }
+    }
+    .btn-deposit{
+        background-color: #49CD66;
+    }
+
+    .btn-withdraw {
+        background-color: #B23E3E;
+    }
+
+    .balance-amount {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 11pt;
+        background-color: #DEDEDE;
+        color: #757575;
+    }
+
+    input{
+        height: 100%;
+        border: none;
+        padding-left: 20px;
+        background-color: #DEDEDE;
+    }
+}

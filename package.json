@@ -41,6 +41,7 @@
     "@openzeppelin/contracts": "^3.3.0",
     "@studydefi/money-legos": "^2.4.1",
     "@uniswap/sdk": "^3.0.3",
+    "@uniswap/v2-periphery": "^1.1.0-beta.0",
     "dotenv": "^8.2.0"
   }
 }

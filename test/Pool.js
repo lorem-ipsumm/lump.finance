@@ -29,8 +29,6 @@ describe("Pools", function () {
   let poolFactory;
   let poolContract;
   let poolFactoryContract;
-  let uniswap;
-  let uniswapContract;
   let pools;
   let owner;
   let addr1;
@@ -52,7 +50,7 @@ describe("Pools", function () {
   ];
 
   // swap ETH to Token
-  async function swapETH(token, amount, account) {
+  async function swapETH(contract, token, amount, account) {
 
     const deadline = Math.floor(Date.now() / 1000) + 60 * 10;
 
@@ -74,10 +72,11 @@ describe("Pools", function () {
     const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw.toString();
 
     // perform action on behalf of account
-    await uniswap.connect(account).swapExactETHForTokens(token.address, amountOutMin, deadline, {value});
+    await contract.connect(account).swapExactETHForTokens(token.address, account.address, amountOutMin, deadline, {value});
 
   }
 
+  // get an accounts balance of token
   async function getTokenBalance(token, account) {
 
     // construct contract and get token bal
@@ -90,6 +89,14 @@ describe("Pools", function () {
 
   }
 
+  // get account ether balance
+  async function getWalletBalance(account) {
+
+    let walletBalance = await account.provider.getBalance(account.address);
+    return parseFloat(ethers.utils.formatEther(walletBalance.toString()));
+
+  }
+
   // `beforeEach` will run before each test, re-deploying the contract every
   // time. It receives a callback, which can be async.
   beforeEach(async function () {
@@ -98,7 +105,7 @@ describe("Pools", function () {
     // Pool = await ethers.getContractFactory("Pool");
     poolFactory = await ethers.getContractFactory("PoolFactory");
     pool = await ethers.getContractFactory("Pool");
-    uniswapContract = await ethers.getContractFactory("Swap");
+    // uniswapContract = await ethers.getContractFactory("Swap");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
     // To deploy our contract, we just have to call Token.deploy() and await
@@ -108,8 +115,8 @@ describe("Pools", function () {
     await poolFactoryContract.deployed();
     
     // deploy uniswap contracts
-    uniswap = await uniswapContract.deploy("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D");
-    await uniswap.deployed();
+    // uniswap = await uniswapContract.deploy("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D");
+    // await uniswap.deployed();
 
     // create new pools
     await poolFactoryContract.connect(addr1).newPool(addr1.address);
@@ -146,14 +153,18 @@ describe("Pools", function () {
 
     it("Should swap tokens", async function() {
 
+
         const address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"; 
         const token = await Fetcher.fetchTokenData(ChainId.MAINNET, address, addr2.provider);
+
+        // swap code is in each pool
+        const pool1 = new ethers.Contract(pools[0], pool.interface, addr2.provider);
 
         let initial = await getTokenBalance(token, addr2);
         initial = parseInt(initial.toString());
 
         // swap ETH for token on addr2
-        await swapETH(token, "5", addr2);
+        await swapETH(pool1, token, "5", addr2);
 
         let next  = await getTokenBalance(token, addr2);
         next = parseInt(next.toString());
@@ -162,11 +173,12 @@ describe("Pools", function () {
 
     });
 
-    it("Should deposit into a pool", async function () {
+    it("Should deposit and withdraw from a pool", async function () {
 
         let pools = await poolFactoryContract.getPools();
 
         let newPool = pools[0];
+
 
         // get the last pool
         const pool1 = new ethers.Contract(newPool, pool.interface, addr2);
@@ -181,32 +193,32 @@ describe("Pools", function () {
         const address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"; 
         const token = await Fetcher.fetchTokenData(ChainId.MAINNET, address, addr2.provider);
 
+        let value = ethers.utils.parseEther(stake.toString());
+
+        await pool1.deposit({value});
+
+        let userBalance = await pool1.balanceOf(addr2.address);
+
+        let walletBal1 = await getWalletBalance(addr2);
+
+        await pool1.withdraw(userBalance);
+
+        // deposit on behalf of another account
+        // await pool1.connect(addrs[0]).deposit({value});
+
+        let walletBal2  = await getWalletBalance(addr2);
+
+        expect(walletBal1).to.lt(walletBal2);
+
+        let finalBalance = await pool1.getTotalBalance();
+
         /*
-        const dai = new ethers.Contract(
-          token.address,
-          ERC20_ABI,
-          addr2
-        );
-        */
-
-        const nonce = await addr2.getTransactionCount();
-
-        /*
-        const transaction = {
-          to: newPool,
-          nonce,
-          value: "5",
-          // data: "0x",
-          chainId: 1 // mainnet fork
-        };
-        */
-
-        const transaction = {
+        let transaction = {
           nonce,
           // gasLimit: config.gasLimit,
           // gasPrice: gasPrice,
           to: newPool,
-          value: ethers.utils.parseEther("5"),
+          value: ethers.utils.parseEther(stake),
           // data: "0x",
           // This ensures the transaction cannot be replayed on different networks
           chainId: 1 // ropsten
@@ -215,7 +227,38 @@ describe("Pools", function () {
         // send ETH to pool
         await addr2.sendTransaction(transaction);
 
-        expect(await pool1.balanceOf(addr2.address)).to.equal(stake);
+
+        let balance = await pool1.balanceOf(addr2.address);
+        balance = parseInt(ethers.utils.formatEther(balance.toString()));
+
+        expect(balance).to.equal(stake);
+
+        // get new nonce
+        nonce = await addr2.getTransactionCount();
+
+        // new transaction
+        transaction = {
+          nonce,
+          // gasLimit: config.gasLimit,
+          // gasPrice: gasPrice,
+          to: newPool,
+          value: ethers.utils.parseEther(stake),
+          // data: "0x",
+          // This ensures the transaction cannot be replayed on different networks
+          chainId: 1 // ropsten
+        };
+
+        // update nonce
+        // transaction[nonce] = await addr2.getTransactionCount();
+
+        // send ETH to pool
+        await addr2.sendTransaction(transaction);
+
+        balance = await pool1.balanceOf(addr2.address);
+        balance = parseInt(ethers.utils.formatEther(balance.toString()));
+
+        expect(balance).to.equal(stake*2);
+        */
 
     })
 

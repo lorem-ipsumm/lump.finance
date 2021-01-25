@@ -1,0 +1,237 @@
+.creator-wrapper {
+  width: 60%;
+  height: auto;
+  background-color: #EFEFEF;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.17);
+          box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.17);
+  -webkit-transition: all ease 0.3s;
+  transition: all ease 0.3s;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.creator-header {
+  background-color: black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  color: white;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px 30px;
+}
+
+.creator-header .register {
+  color: white;
+  text-align: right;
+}
+
+.creator-profile {
+  background-color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 20px;
+}
+
+.creator-profile .creator-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.creator-profile .creator-info .creator-name {
+  font-size: 16pt;
+}
+
+.creator-profile .creator-info div {
+  margin: 5px 0px;
+}
+
+.creator-profile .info-top {
+  font-weight: bold;
+}
+
+.creator-profile img {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  margin-right: 20px;
+  -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+          box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+}
+
+.creator-middle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+.creator-middle .middle-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.creator-middle .middle-text {
+  background: #E5E5E5;
+  padding: 5px;
+  min-height: 170px;
+  max-height: 170px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 0 15px;
+  padding: 20px;
+  color: #141414;
+  overflow-y: auto;
+  line-height: 1.5em;
+}
+
+.creator-middle .middle-text a {
+  color: #141414;
+}
+
+.creator-middle .middle-text ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-decoration: underline;
+  font-size: 12pt;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.creator-middle .middle-text ul li {
+  margin-bottom: 7px;
+}
+
+.creator-middle .creator-links {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.creator-middle .creator-explain {
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+}
+
+.creator-actions {
+  height: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.creator-actions * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 100%;
+}
+
+.creator-actions .button-wrapper {
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.creator-actions button {
+  border: none;
+  color: white;
+  font-size: 15pt;
+  -webkit-transition: all ease 0.1s;
+  transition: all ease 0.1s;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.creator-actions button:hover {
+  -webkit-filter: brightness(90%);
+          filter: brightness(90%);
+}
+
+.creator-actions .btn-deposit {
+  background-color: #49CD66;
+}
+
+.creator-actions .btn-withdraw {
+  background-color: #B23E3E;
+}
+
+.creator-actions .balance-amount {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 11pt;
+  background-color: #DEDEDE;
+  color: #757575;
+}
+
+.creator-actions input {
+  height: 100%;
+  border: none;
+  padding-left: 20px;
+  background-color: #DEDEDE;
+}
+/*# sourceMappingURL=creator.css.map */
