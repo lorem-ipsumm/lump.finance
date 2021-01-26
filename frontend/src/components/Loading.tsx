@@ -18,7 +18,7 @@ export default function Loading() {
             if (message)
                 message.classList.add("visible");
 
-        }, 3000);
+        }, 5000);
 
 
         // runs on component unmount
@@ -30,13 +30,13 @@ export default function Loading() {
     }, []);
 
     return (
-        <div className="loading-wrapper wrapper">
+        <div className="loading-wrapper page-wrapper">
             <div className="loading">
                 <span>Loading</span>
             </div>
 
             <div className="loading-message">
-                <span>Your data is coming. Please be patient. If this cotinues try refreshing the page.</span>
+                <span>This is taking a while... If this cotinues try refreshing the page.</span>
             </div>
         </div> 
     );

@@ -133,7 +133,7 @@ export function Dapp() {
 
         // check for wallet
         if (window.ethereum === undefined){
-            ;
+            return;
         }
 
 
@@ -150,6 +150,7 @@ export function Dapp() {
    if (!initialized) {
        return(
             <div className="page-wrapper">
+                <Particles params={params}/>
                 <Loading/>
             </div>
        );

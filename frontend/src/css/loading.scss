@@ -1,24 +1,19 @@
 .loading-wrapper {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    background: rgba(0,0,0,0);
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-  }
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: relative;
+  background: rgba(0,0,0,0.4);
+  box-shadow: 1px 1px 15px 5px rgba(0,0,0,0.17);
+  padding: 2.5em;
+  width: 171px;
+  height: 109px;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  animation: zoom-in 1s ease;
+  // animation-iteration-count: infinite;
+}
   
   .loading-container {
     display: -webkit-box;
@@ -41,7 +36,7 @@
   
   .loading {
     font-size: 18pt;
-    margin-bottom: 30px;
+    // margin-bottom: 30px;
     position: relative;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -57,6 +52,7 @@
 
   .loading span {
     color: white;
+    font-weight: bold;
   }
   
   .loading img {
@@ -74,7 +70,8 @@
             animation: slide 2s ease-in-out;
     -webkit-animation-iteration-count: infinite;
             animation-iteration-count: infinite;
-    background-color: #B599CE;
+    // background-color: #B599CE;
+    background: white;
   }
   
   @-webkit-keyframes slide {
@@ -93,6 +90,20 @@
     100% {
       right: 0;
       width: 0;
+    }
+  }
+
+  @keyframes zoom-in {
+    from {
+      font-size: 0pt;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    to {
+      width: 171px;
+      height: 109px;
     }
   }
   
@@ -153,8 +164,9 @@
   
   .loading-message span {
     text-align: center;
-    font-size: 10pt;
-    color: #c7c7c7;
+    font-size: 11pt;
+    // color: #c7c7c7;
+    color: black;
   }
   
   .loading-message.visible {

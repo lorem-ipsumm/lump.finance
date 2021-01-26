@@ -14,7 +14,7 @@
           box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.17);
   -webkit-transition: all ease 0.3s;
   transition: all ease 0.3s;
-  border-radius: 5px;
+  border-radius: 3px;
   overflow: hidden;
 }
 
