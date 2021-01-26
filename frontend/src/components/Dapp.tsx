@@ -6,6 +6,18 @@ import "../css/resize.css";
 import Creator from './Creator';
 import Loading from './Loading';
 import Particles from 'react-particles-js';
+import { ethers } from "ethers";
+import contractAddress from "../contracts/contract-address.json";
+import PoolFactoryArtifact from "../contracts/PoolFactory.json";
+import PoolAritfact from "../contracts/Pool.json";
+
+
+// ethereum.window fix
+declare global {
+    interface Window {
+        ethereum:any;
+    }
+}
 
 /**
  * Home page that contains a grid of decks, a search bar,
@@ -14,6 +26,13 @@ import Particles from 'react-particles-js';
 export function Dapp() {
 
     const[creatorLoaded, setCreatorLoaded] = useState(false);
+    const[connectedAddress, setConnectedAddress] = useState<string>("");
+    const[initialized, setInitialized] = useState<boolean>(false);
+    const[provider, setProvider] = useState<any>(undefined);
+    const[poolFactory, setPoolFactory] = useState<ethers.Contract>(new ethers.Contract(
+        contractAddress.PoolFactory,
+        PoolFactoryArtifact.abi
+    ));
 
     // parameters for particles
     const params = {
@@ -36,20 +55,99 @@ export function Dapp() {
 	            }
 	        }
 	    }
-	}
+    }
+
+    // set dappp data
+    async function initialize(userAddress: string) {
+
+        setConnectedAddress(userAddress);
+
+        const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+
+        // initialize provider
+        setProvider(web3Provider);
+
+        // setup PoolFactory contract
+        const contract = new ethers.Contract(
+            contractAddress.PoolFactory,
+            PoolFactoryArtifact.abi,
+            web3Provider.getSigner(0)
+        );
+
+        // When, we initialize the contract using that provider and the token's
+        // artifact. You can do this same thing with your contracts.
+        setPoolFactory(contract);
+
+        let pools = await contract.getPools();
+        // console.log(pools);
+
+        let balance = await web3Provider.getBalance(userAddress);
+        // console.log(ethers.utils.formatEther(balance.toString()) + " " + ethers.constants.EtherSymbol);
+
+        // console.log(userAddress);
+        setInitialized(true);
+    }
+
+    // check if the dapp is ready
+    function dappReady() {
+        return(false);
+    }
+
+    // connect to the users wallet
+    async function connectWallet() {
+
+        // To connect to the user's wallet, we have to run this method.
+        // It returns a promise that will resolve to the user's address.
+        const [selectedAddress] = await window.ethereum.enable();
+
+        // Once we have the address, we can initialize the application.
+
+        // First we check the network
+        // if (!this._checkNetwork()) {
+        // return;
+        // }
+
+        // setup vars
+        await initialize(selectedAddress);
+
+
+        // listen for wallet account changes to update dapp vars
+        window.ethereum.on("accountsChanged", ([newAddress]: string[]) => {
+
+            // initialize with new address
+            if (newAddress !== undefined)
+                initialize(newAddress);
+
+        });
+
+        // We reset the dapp state if the network is changed
+        window.ethereum.on("networkChanged", ([networkId]: string[]) => {
+            console.log("network changed to: ", networkId);
+        });
+
+    }
+
 
     // run on load
     useEffect(() => {
 
-        // get decks
-        // getDecks();
-
-        setCreatorLoaded(true);
-
-    }, []);
+        // check for wallet
+        if (window.ethereum === undefined){
+            ;
+        }
 
 
-   if (!creatorLoaded) {
+        if (connectedAddress === "") {
+            connectWallet();
+        } else {
+            setInitialized(true);
+        }
+
+
+    }, [connectedAddress]);
+
+
+   if (!initialized) {
        return(
             <div className="page-wrapper">
                 <Loading/>
@@ -59,7 +157,7 @@ export function Dapp() {
         return(
             <div className="page-wrapper">
                 <Particles params={params}/>
-                <Creator/>
+                <Creator poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>
             </div>
         );
     }

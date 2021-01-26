@@ -75,7 +75,6 @@ export class Dapp extends React.Component {
     //
     // Note that we pass it a callback that is going to be called when the user
     // clicks a button. This callback just calls the _connectWallet method.
-    /*
     if (!this.state.selectedAddress) {
       return (
         <ConnectWallet 
@@ -91,7 +90,6 @@ export class Dapp extends React.Component {
     if (!this.state.tokenData || !this.state.balance) {
       return <Loading />;
     }
-    */
 
     // If everything is loaded, we render the application.
     return (

@@ -2,6 +2,7 @@
   width: 60%;
   height: auto;
   background-color: #EFEFEF;
+  background: #DCDCDC;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -27,6 +28,7 @@
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding: 10px 30px;
+  font-size: 15pt;
 }
 
 .creator-header .register {
@@ -86,8 +88,10 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding: 10px;
-  margin-bottom: 30px;
+  align-items: center;
+  padding: 20px;
+  padding-bottom: 50px;
+  background: #E5E5E5;
 }
 
 .creator-middle .middle-section {
@@ -107,10 +111,10 @@
 }
 
 .creator-middle .middle-text {
-  background: #E5E5E5;
+  background: #dbdbdb;
   padding: 5px;
-  min-height: 170px;
-  max-height: 170px;
+  min-height: 200px;
+  max-height: 200px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -160,13 +164,17 @@
 }
 
 .creator-actions {
-  height: 40px;
+  height: 80px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   width: 100%;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
@@ -181,12 +189,17 @@
 }
 
 .creator-actions .button-wrapper {
-  -webkit-box-flex: 2;
-      -ms-flex: 2;
-          flex: 2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  width: 100%;
+}
+
+.creator-actions .input-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
 }
 
 .creator-actions button {
@@ -224,14 +237,15 @@
       -ms-flex-align: center;
           align-items: center;
   font-size: 11pt;
-  background-color: #DEDEDE;
-  color: #757575;
+  background-color: #c8c8c8;
+  color: #000;
 }
 
 .creator-actions input {
   height: 100%;
   border: none;
-  padding-left: 20px;
-  background-color: #DEDEDE;
+  padding: 0 20px;
+  background-color: #c8c8c8;
+  min-width: 70%;
 }
 /*# sourceMappingURL=creator.css.map */
