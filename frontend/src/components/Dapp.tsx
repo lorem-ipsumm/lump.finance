@@ -9,7 +9,6 @@ import Particles from 'react-particles-js';
 import { ethers } from "ethers";
 import contractAddress from "../contracts/contract-address.json";
 import PoolFactoryArtifact from "../contracts/PoolFactory.json";
-import PoolAritfact from "../contracts/Pool.json";
 
 
 // ethereum.window fix
@@ -25,7 +24,7 @@ declare global {
  */
 export function Dapp() {
 
-    const[creatorLoaded, setCreatorLoaded] = useState(false);
+    // const[creatorLoaded, setCreatorLoaded] = useState(false);
     const[connectedAddress, setConnectedAddress] = useState<string>("");
     const[initialized, setInitialized] = useState<boolean>(false);
     const[provider, setProvider] = useState<any>(undefined);
@@ -81,6 +80,7 @@ export function Dapp() {
         return;
 
 
+        /*
         let pools = await contract.getPools();
         // console.log(pools);
 
@@ -89,21 +89,16 @@ export function Dapp() {
 
         // console.log(userAddress);
         setInitialized(true);
+        */
     }
 
-    // check if the dapp is ready
-    function dappReady() {
-        return(false);
-    }
-
+    
     // connect to the users wallet
     async function connectWallet() {
 
         // To connect to the user's wallet, we have to run this method.
         // It returns a promise that will resolve to the user's address.
         const [selectedAddress] = await window.ethereum.enable();
-
-        console.log(selectedAddress);
 
         // Once we have the address, we can initialize the application.
 

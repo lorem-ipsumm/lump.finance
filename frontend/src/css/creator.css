@@ -15,7 +15,6 @@
   -webkit-transition: all ease 0.3s;
   transition: all ease 0.3s;
   border-radius: 3px;
-  overflow: hidden;
   -webkit-animation: zoom-in 1s ease;
           animation: zoom-in 1s ease;
 }
@@ -76,8 +75,8 @@
   height: 100px;
   border-radius: 100%;
   margin-right: 20px;
-  -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
-          box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.57);
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.57);
 }
 
 .creator-middle {
@@ -166,7 +165,7 @@
 }
 
 .creator-actions {
-  height: 80px;
+  height: auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -187,7 +186,7 @@
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
-  height: 100%;
+  height: 45px;
 }
 
 .creator-actions .button-wrapper {
@@ -202,6 +201,11 @@
   display: -ms-flexbox;
   display: flex;
   width: 100%;
+  font-size: 100pt;
+}
+
+.creator-actions .input-wrapper * {
+  font-size: 14pt;
 }
 
 .creator-actions button {
@@ -238,17 +242,15 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  font-size: 11pt;
   background-color: #c8c8c8;
   color: #000;
 }
 
 .creator-actions input {
-  height: 100%;
   border: none;
-  padding: 0 20px;
   background-color: #c8c8c8;
   min-width: 70%;
+  font-size: 16pt;
 }
 
 @-webkit-keyframes zoom-in {

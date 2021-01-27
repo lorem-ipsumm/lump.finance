@@ -51,5 +51,9 @@
     .page-wrapper{
         align-items: flex-start;
         margin: 20px 0px;
+
+        .loading-wrapper {
+            margin: auto;
+        }
     }
 }

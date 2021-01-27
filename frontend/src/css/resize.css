@@ -60,5 +60,8 @@
             align-items: flex-start;
     margin: 20px 0px;
   }
+  .page-wrapper .loading-wrapper {
+    margin: auto;
+  }
 }
 /*# sourceMappingURL=resize.css.map */

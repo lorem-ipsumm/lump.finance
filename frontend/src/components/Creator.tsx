@@ -4,8 +4,8 @@ import Loading from './Loading';
 import "../css/creator.css";
 import { ethers } from "ethers";
 import PoolAritfact from "../contracts/Pool.json";
-import contractAddress from "../contracts/contract-address.json";
-import { reduceEachTrailingCommentRange } from 'typescript';
+// import contractAddress from "../contracts/contract-address.json";
+
 
 /**
  * Home page that contains a grid of decks, a search bar,
@@ -15,7 +15,7 @@ function Creator(props: {poolFactory: ethers.Contract,
                          provider: ethers.providers.Web3Provider,
                          connectedAddress: string}) {
 
-    const[creatorLoaded, setCreatorLoaded] = useState(false);
+    // const[creatorLoaded, setCreatorLoaded] = useState(false);
     const[walletBalance, setWalletBalance] = useState<number>(0);
     const[inputAmount, setInputAmount] = useState<number>(0);
 
@@ -41,9 +41,9 @@ function Creator(props: {poolFactory: ethers.Contract,
 
         initialize(); 
 
-        setCreatorLoaded(true);
+        // setCreatorLoaded(true);
 
-    }, [props.connectedAddress]);
+    });
 
 
     async function depositClicked () {
@@ -98,8 +98,8 @@ function Creator(props: {poolFactory: ethers.Contract,
                                 <span>
                                     <b>Lump.Finance</b> is a platform that allows fans to financially support their 
                                     favorite creators without spending any money. Through the magic of <a href="https://ethereum.org/en/">Ethereum</a> and <a href="https://aave.com/"> AAVE's Lending Pools</a>, fans 
-                                    can deposit funds into a pool which generates interest to be collected by the creator. At any point fans can withdraw nearly 100% of their deposit (some is lost from Ethereum transaction fees)
-                                    and creators can withdraw the accrued interest whenever needed.
+                                    can <b>lump</b> their funds together in a pool that generates interest to be collected by the creator. At any point fans can withdraw nearly 100% of their deposit (some is lost from Ethereum transaction fees)
+                                    and creators can withdraw the accrued interest whenever needed without touching the money deposited by their fans.
                                 </span>
                             </div>
                         </div>
@@ -107,7 +107,7 @@ function Creator(props: {poolFactory: ethers.Contract,
                     <div className="creator-actions">
                         <div className="input-wrapper">
                             <input type="number" className="input-amount" placeholder="Insert Amount in ETH" onChange={(e) => {setInputAmount(parseFloat(e.target.value))}}></input>
-                            <span className="balance-amount">Wallet Balance: {walletBalance} ETH</span>
+                            <span className="balance-amount">Wallet Balance: {walletBalance.toPrecision(4)} ETH</span>
                         </div>
                         <div className="button-wrapper">
                             <button className="btn-deposit" onClick={depositClicked}>Deposit</button>
