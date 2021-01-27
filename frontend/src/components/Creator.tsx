@@ -5,6 +5,7 @@ import "../css/creator.css";
 import { ethers } from "ethers";
 import PoolAritfact from "../contracts/Pool.json";
 import contractAddress from "../contracts/contract-address.json";
+import { reduceEachTrailingCommentRange } from 'typescript';
 
 /**
  * Home page that contains a grid of decks, a search bar,
@@ -20,8 +21,8 @@ function Creator(props: {poolFactory: ethers.Contract,
 
     async function initialize() {
 
-        // exit if not ready
-        if (props.provider === undefined || props.poolFactory === undefined || props.connectedAddress === undefined)
+
+        if (props.connectedAddress === "" || props.provider === undefined)
             return;
 
         // get wallet balance in bigint format
@@ -31,12 +32,10 @@ function Creator(props: {poolFactory: ethers.Contract,
         setWalletBalance(parseFloat(ethers.utils.formatEther(bal)));
 
 
-
     }
 
     // run on load
     useEffect(() => {
-
         // get decks
         // getDecks();
 
@@ -44,10 +43,11 @@ function Creator(props: {poolFactory: ethers.Contract,
 
         setCreatorLoaded(true);
 
-    }, []);
+    }, [props.connectedAddress]);
 
 
     async function depositClicked () {
+
 
         let poolAddress = (await props.poolFactory.getPools())[0];
 

@@ -78,6 +78,9 @@ export function Dapp() {
         // artifact. You can do this same thing with your contracts.
         setPoolFactory(contract);
 
+        return;
+
+
         let pools = await contract.getPools();
         // console.log(pools);
 
@@ -137,11 +140,13 @@ export function Dapp() {
         }
 
 
-        if (connectedAddress === "") {
-            connectWallet();
-        } else {
-            setInitialized(true);
-        }
+        setTimeout(() => {
+            if (connectedAddress === "") {
+                connectWallet();
+            } else {
+                setInitialized(true);
+            }
+        }, 3000);
 
 
     }, [connectedAddress]);
