@@ -156,7 +156,7 @@ export function Dapp() {
             } else {
                 setInitialized(true);
             }
-        }, 3000);
+        }, 1000);
 
 
     }, [connectedAddress]);
