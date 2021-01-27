@@ -70,7 +70,7 @@ function Creator(props: {poolFactory: ethers.Contract,
                 <div className="creator-wrapper">
                     <div className="creator-header">
                         <span className="pool-balance">Money Pooled: $3,032</span>
-                        <a href="localhost:3000" className="register">Become a creator to start earning money</a>
+                        <a href="/" className="register">Become a creator to start earning money</a>
                     </div>    
                     <div className="creator-profile">
                         <img alt="profile" src="https://boredhumans.b-cdn.net/faces2/13.jpg"></img>

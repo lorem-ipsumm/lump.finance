@@ -103,6 +103,8 @@ export function Dapp() {
         // It returns a promise that will resolve to the user's address.
         const [selectedAddress] = await window.ethereum.enable();
 
+        console.log(selectedAddress);
+
         // Once we have the address, we can initialize the application.
 
         // First we check the network
@@ -134,13 +136,21 @@ export function Dapp() {
     // run on load
     useEffect(() => {
 
-        // check for wallet
-        if (window.ethereum === undefined){
-            return;
-        }
 
-
+        // this is fake loading for now
         setTimeout(() => {
+
+            // check for wallet
+            if (window.ethereum === undefined){
+                // return;
+
+                // set connected to burn for no wallet
+                setConnectedAddress("0x000000000000000000000000000000000000dEaD");
+                setInitialized(true);
+                return;
+            }
+
+
             if (connectedAddress === "") {
                 connectWallet();
             } else {
