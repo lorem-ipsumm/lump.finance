@@ -223,19 +223,13 @@ describe("Pools", function () {
           // This ensures the transaction cannot be replayed on different networks
           chainId: 1 // ropsten
         };
-
         // send ETH to pool
         await addr2.sendTransaction(transaction);
-
-
         let balance = await pool1.balanceOf(addr2.address);
         balance = parseInt(ethers.utils.formatEther(balance.toString()));
-
         expect(balance).to.equal(stake);
-
         // get new nonce
         nonce = await addr2.getTransactionCount();
-
         // new transaction
         transaction = {
           nonce,
@@ -247,16 +241,12 @@ describe("Pools", function () {
           // This ensures the transaction cannot be replayed on different networks
           chainId: 1 // ropsten
         };
-
         // update nonce
         // transaction[nonce] = await addr2.getTransactionCount();
-
         // send ETH to pool
         await addr2.sendTransaction(transaction);
-
         balance = await pool1.balanceOf(addr2.address);
         balance = parseInt(ethers.utils.formatEther(balance.toString()));
-
         expect(balance).to.equal(stake*2);
         */
 
@@ -273,18 +263,15 @@ describe("Pools", function () {
   describe("Deposit", function () {
     // `it` is another Mocha function. This is the one you use to define your
     // tests. It receives the test name, and a callback function.
-
     // If the callback function is async, Mocha will `await` it.
     it("Should set the right owner", async function () {
       // Expect receives a value, and wraps it in an assertion objet. These
       // objects have a lot of utility methods to assert values.
-
       // This test expects the owner variable stored in the contract to be equal
       // to our Signer's owner.
       // expect(await poolContract.owner()).to.equal(owner.address);
       // expect(true);
     });
-
   });
   */
 });

@@ -127,6 +127,13 @@
     width: 100%;
     justify-content:space-between;
 
+    &.dark {
+        background: black;
+        color: white;
+        font-size: 15pt;
+        padding: 10px 0px;
+    }
+
     *{
         flex: 1;
         height: 45px;
@@ -143,7 +150,8 @@
         font-size: 100pt;
 
         & *{
-            font-size: 14pt;
+            font-size: 13pt;
+            flex: 1;
         }
     }
     
@@ -179,7 +187,7 @@
         // border: 2px solid #818181;
         border: none;
         background-color: #c8c8c8;
-        min-width: 70%;
+        // min-width: 70%;
         font-size: 16pt;
         padding-left: 20px;
     }

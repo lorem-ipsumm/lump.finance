@@ -6,12 +6,12 @@
     "test": "test"
   },
   "scripts": {
-    "test": "hardhat test --network localhost",
+    "test": "hardhat test --network ",
     "node": "hardhat node",
-    "fork": "hardhat node --fork https://mainnet.infura.io/v3/ba80b08e962a4d3b97bf1f61b5e057b2",
+    "fork": "hardhat node --fork https://kovan.infura.io/v3/ba80b08e962a4d3b97bf1f61b5e057b2",
     "compile": "hardhat compile",
     "frontend": "cd frontend && npm start",
-    "deploy": "npx hardhat run scripts/deploy.js --network localhost",
+    "deploy": "npx hardhat run scripts/deploy.js --network",
     "build": "cd frontend && npm run build"
   },
   "repository": {

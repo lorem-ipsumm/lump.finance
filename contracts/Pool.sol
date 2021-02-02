@@ -23,11 +23,32 @@ contract Pool {
     // aave lending pool interface
     ILendingPool aave;
 
-    address public DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
-    address public USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
-    address public aUSDC = 0xBcca60bB61934080951369a648Fb03DF4F96263C;
+    // mainnet dai
+    // address public DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
+
+    // kovan DAI 
+    address public DAI = 0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD;
+
+    // kovan aDAI
+    address public aDAI = 0xdCf0aF9e59C002FA3AA091a46196b37530FD48a8;
+
+    // kovan USDC 
+    address public USDC = 0xdCFaB8057d08634279f8201b55d311c2a67897D2;
+
+    // kovan aUSDC
+    address public aUSDC = 0xF9155b335FAa6C184aB2F2c4D5939d86268F3668;
+
+    // mainnet usdc 
+    // address public USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+
+    // mainnet aUSDC
+    // address public aUSDC = 0xBcca60bB61934080951369a648Fb03DF4F96263C;
+
+    // kovan/mainnet uniswap router
     address public UNISWAP_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
-    address public LENDING_POOL = 0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9;
+
+    // kovan aave lending pool
+    address public LENDING_POOL = 0x9FE532197ad76c5a68961439604C037EB79681F0;
 
     // store addres -> account mapping
     mapping(address => uint256) balances;
@@ -44,6 +65,7 @@ contract Pool {
      * The `public` modifier makes a function callable from outside the contract.
      */
     constructor(address _owner) {
+
         // set owner
         owner = _owner;
 
@@ -183,13 +205,13 @@ contract Pool {
         //Swap uniswap = Swap(UNISWAP_ROUTER);
 
         // setup DAI token
-        IERC20 stable = IERC20(USDC);
+        IERC20 stable = IERC20(DAI);
 
         swapExactETHForTokens(address(stable), address(this), 0, block.timestamp);
 
         // at this point the contract should have converted the deposited Ether to some stablecoin
 
-        // get the amount of avilable stablecoin
+        // get the amount of available stablecoin
         uint256 amountStable = stable.balanceOf(address(this));
 
         console.log("stable amount before deposit: ", amountStable);
@@ -202,9 +224,9 @@ contract Pool {
         aave.deposit(address(stable), amountStable, address(this), 0);
 
         // setup aToken reference
-        IERC20 aToken = IERC20(aUSDC);
+        IERC20 aToken = IERC20(aDAI);
 
-        amountStable = stable.balanceOf(address(this));
+        // amountStable = stable.balanceOf(address(this));
 
         console.log("stable amount after deposit: ", amountStable);
 
@@ -212,10 +234,10 @@ contract Pool {
         console.log("aToken balance: ", aTokenBalance);
 
         // keep track of how much this user has deposited
-        balances[msg.sender] += aTokenBalance;
+        balances[msg.sender] += amountStable;
 
         // increment total balance
-        totalBalance += aTokenBalance;
+        totalBalance += amountStable;
 
     }
 
@@ -229,7 +251,7 @@ contract Pool {
         require(amount <= balances[msg.sender], "Attempting to withdraw more than deposited");
 
         // setup stablecoin 
-        IERC20 stable = IERC20(USDC);
+        IERC20 stable = IERC20(DAI);
 
         // withdraw tokens from the lending pool
         aave.withdraw(address(stable), amount, address(this));

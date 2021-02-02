@@ -182,6 +182,13 @@
           justify-content: space-between;
 }
 
+.creator-actions.dark {
+  background: black;
+  color: white;
+  font-size: 15pt;
+  padding: 10px 0px;
+}
+
 .creator-actions * {
   -webkit-box-flex: 1;
       -ms-flex: 1;
@@ -205,7 +212,10 @@
 }
 
 .creator-actions .input-wrapper * {
-  font-size: 14pt;
+  font-size: 13pt;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
 
 .creator-actions button {
@@ -249,7 +259,6 @@
 .creator-actions input {
   border: none;
   background-color: #c8c8c8;
-  min-width: 70%;
   font-size: 16pt;
   padding-left: 20px;
 }

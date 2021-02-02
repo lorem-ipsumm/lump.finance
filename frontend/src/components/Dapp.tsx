@@ -91,14 +91,22 @@ export function Dapp() {
         setInitialized(true);
         */
     }
-
     
     // connect to the users wallet
     async function connectWallet() {
 
+        let selectedAddress;
+
         // To connect to the user's wallet, we have to run this method.
         // It returns a promise that will resolve to the user's address.
-        const [selectedAddress] = await window.ethereum.enable();
+        try {
+            [selectedAddress] = await window.ethereum.enable();
+        } catch (err) {
+            console.log()
+            setInitialized(true);
+            return;
+        }
+
 
         // Once we have the address, we can initialize the application.
 
@@ -121,8 +129,13 @@ export function Dapp() {
         });
 
         // We reset the dapp state if the network is changed
-        window.ethereum.on("networkChanged", ([networkId]: string[]) => {
-            console.log("network changed to: ", networkId);
+        window.ethereum.on("networkChanged", async ([networkId]: string[]) => {
+            const [selectedAddress] = await window.ethereum.enable();
+
+            // initialize on new network w/ selected address
+            if (selectedAddress !== undefined)
+                initialize(selectedAddress);
+
         });
 
     }
@@ -138,9 +151,6 @@ export function Dapp() {
             // check for wallet
             if (window.ethereum === undefined){
                 // return;
-
-                // set connected to burn for no wallet
-                setConnectedAddress("0x000000000000000000000000000000000000dEaD");
                 setInitialized(true);
                 return;
             }
@@ -153,7 +163,7 @@ export function Dapp() {
             }
         }, 1000);
 
-
+    // eslint-disable-next-line
     }, [connectedAddress]);
 
 

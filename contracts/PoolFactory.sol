@@ -37,12 +37,20 @@ contract PoolFactory {
     }
 
     /**
+     * Read only function to retrieve all pools that have been created
+     */
+    function getPools() public view returns (Pool[] memory){
+        return pools;
+    }
+
+    /**
      * A function to create new Pool contracts for creators
      *
      * @param _owner: the owner of the pool which determines which wallet can withdraw pooled 
      * interest.
+     * @return address of newly created pool
      */
-    function newPool(address _owner) external {
+    function newPool(address _owner) external returns(address){
 
         // initialize new pool
         Pool pool = new Pool(_owner);
@@ -50,14 +58,13 @@ contract PoolFactory {
         // push new pool to pool list
         pools.push(pool);
 
+        // get newly created pool
+        address poolAddr = address(pools[pools.length - 1]);
+
+        return poolAddr;
 
     }
 
-    /**
-     * Read only function to retrieve all pools that have been created
-     */
-    function getPools() external view returns (Pool[] memory){
-        return pools;
-    }
+
 
 }

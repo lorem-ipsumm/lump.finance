@@ -1,4 +1,7 @@
 // This is a script for deploying your contracts. You can adapt it to deploy
+
+const { ethers } = require("hardhat");
+
 // yours, or create new ones.
 async function main() {
   // This is just a convenience check
@@ -19,16 +22,22 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
-  await token.deployed();
+  // const Token = await ethers.getContractFactory("Token");
+  // const token = await Token.deploy();
+  // await token.deployed();
 
-  console.log("Token address:", token.address);
+  // deploy PoolFactory.sol
+  const PoolFactory = await ethers.getContractFactory("PoolFactory");
+  const poolFactory = await PoolFactory.deploy();
+  await poolFactory.deployed();
+
+  console.log("Contract address:", poolFactory.address);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(token);
+  // saveFrontendFiles(token);
 }
 
+/*
 function saveFrontendFiles(token) {
   const fs = require("fs");
   const contractsDir = __dirname + "/../frontend/src/contracts";
@@ -49,6 +58,7 @@ function saveFrontendFiles(token) {
     JSON.stringify(TokenArtifact, null, 2)
   );
 }
+*/
 
 main()
   .then(() => process.exit(0))
