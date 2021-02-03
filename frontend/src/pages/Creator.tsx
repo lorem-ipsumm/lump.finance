@@ -150,9 +150,9 @@ function Creator(props: {poolFactory: ethers.Contract,
         let addr = window.location.pathname;
         addr = addr.substr(addr.lastIndexOf("/") + 1);
 
-        // check if addr is valid 
+        // check if addr is valid. if not use default
         if (addr.length !== 42)
-            return;
+            addr = "0x39a7baa3fcb68ad38377ea4ebb402296dd69d981";
 
         var ref = db.collection("users").doc(addr);
 
@@ -230,7 +230,7 @@ function Creator(props: {poolFactory: ethers.Contract,
                 <div className="creator-wrapper">
                     <div className="creator-header">
                         <span className="pool-balance">Money Pooled: ${poolBalance.toPrecision(4)}</span>
-                        <Link to="/new-creator" className="register">Become a creator to start earning money</Link>
+                        <Link to="/new-creator" className="register">Create your own page here</Link>
                     </div>    
                     <div className="creator-profile">
                         <img alt="profile" src="https://boredhumans.b-cdn.net/faces2/13.jpg"></img>

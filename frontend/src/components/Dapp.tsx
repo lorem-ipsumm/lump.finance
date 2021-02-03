@@ -164,6 +164,9 @@ export function Dapp() {
         <div className="page-wrapper">
             <Router>
                 <Particles params={params}/>
+                <Route exact path="/" component={() => 
+                    <Creator initialized={initialized} poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>
+                }></Route>
                 <Route path="/creator/" component={() => 
                     <Creator initialized={initialized} poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>
                 }></Route>
