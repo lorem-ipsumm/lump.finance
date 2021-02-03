@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 // import DeckPreview from '../components/DeckPreview';
-import useInterval from './UseInterval'
-import Loading from './Loading';
+import useInterval from '../components/UseInterval'
+import { Link } from 'react-router-dom';
+import Loading from '../components/Loading';
 import "../css/creator.css";
 import { ethers } from "ethers";
 import PoolAritfact from "../contracts/Pool.json";
 import axios from 'axios';
+import db from '../components/firestore';
 // import contractAddress from "../contracts/contract-address.json";
 
 
@@ -15,7 +17,8 @@ import axios from 'axios';
  */
 function Creator(props: {poolFactory: ethers.Contract, 
                          provider: ethers.providers.Web3Provider,
-                         connectedAddress: string}) {
+                         connectedAddress: string,
+                         initialized: boolean}) {
 
 
     // const[creatorLoaded, setCreatorLoaded] = useState(false);
@@ -24,23 +27,34 @@ function Creator(props: {poolFactory: ethers.Contract,
     const[depositBalance, setDepositBalance] = useState<number>(0);
     const[poolContract, setPoolContract] = useState<ethers.Contract>();
     const[poolBalance, setPoolBalance] = useState<number>(0);
+    const[dataLoaded, setDataLoaded] = useState<boolean>(false);
+    const[displayName, setDisplayName] = useState<string>("");
+    const[bio, setBio] = useState<string>("");
+    const[links, setLinks] = useState<string[]>([]);
+    const[poolAddress, setPoolAddress] = useState<string>("");
 
     async function initialize() {
 
-        getCreatorData();
 
-
-        if (props.connectedAddress === "" || props.provider === undefined)
+        if (props.initialized === false)
             return;
+
+        // no wallet connected
+        if (props.provider === undefined) {
+            // load the creator's data
+            getCreatorData();
+            return;
+        }
+
 
         // get wallet balance in bigint format
         let bal = await props.provider.getBalance(props.connectedAddress);
-
 
         const pools = await props.poolFactory.getPools();
 
         if (pools.length === 0)
             return;
+
 
         // get latest pool
         let poolAddress = pools[pools.length - 1];
@@ -61,6 +75,9 @@ function Creator(props: {poolFactory: ethers.Contract,
 
         // convert to ETH and float then update state
         setWalletBalance(parseFloat(ethers.utils.formatEther(bal)));
+
+        // load the creator's data
+        getCreatorData();
 
     }
 
@@ -103,8 +120,11 @@ function Creator(props: {poolFactory: ethers.Contract,
     // run on load
     useEffect(() => {
 
-        // initialize vars
-        initialize(); 
+        // loading too fast is kind of jarring
+        setTimeout(() => {
+            // initialize vars
+            initialize(); 
+        },1000);
 
     }, []);
 
@@ -129,23 +149,39 @@ function Creator(props: {poolFactory: ethers.Contract,
         // get the deck id from the URL
         let addr = window.location.pathname;
         addr = addr.substr(addr.lastIndexOf("/") + 1);
-        console.log(addr);
 
-        return;
+        // check if addr is valid 
+        if (addr.length !== 42)
+            return;
+
+        var ref = db.collection("users").doc(addr);
+
+        ref.get().then(function(doc) {
+            if (doc.exists) {
+
+                // get the data
+                let data = doc.data();
+
+                // return if data is undefined 
+                if (data === undefined)
+                 return;
+
+                // update state vars
+                setDisplayName(data.name);
+                setBio(data.bio);
+                setPoolAddress(data.pool);
+                setLinks(data.links);
+
+                setDataLoaded(true);
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
         
-        fetch("https://us-central1-source-app-1dd0b.cloudfunctions.net/getDeck?addr=" + addr)
-        .then(response => response.json())
-        .then((responseData) => {
 
-            // update state
-            // setDeck(responseData.data);
-            // getImg("https://www.youtube.com/watch?v=-ZSx_E1QZgw");
-
-        })
-        .catch((error) => {
-            // TODO: handle invalid deck
-            console.log(error)
-        })  
     }
 
 
@@ -188,37 +224,23 @@ function Creator(props: {poolFactory: ethers.Contract,
 
     }
 
-
-    // for now this will just create a new pool
-    async function registerClicked(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-
-        // prevent redirect
-        event.preventDefault();
-
-        // create a new pool with the address as owner
-        const tx = await props.poolFactory.newPool("0x191De0792D4E78B001391001962a550dFbA61238");
-        console.log(tx);
-
-    }
-
-
-    if (props.connectedAddress !== undefined) {
+    if (dataLoaded && props.initialized) {
         return (
             <div className="page-wrapper">
                 <div className="creator-wrapper">
                     <div className="creator-header">
                         <span className="pool-balance">Money Pooled: ${poolBalance.toPrecision(4)}</span>
-                        <a href="/" className="register" onClick={(e) => registerClicked(e)}>Become a creator to start earning money</a>
+                        <Link to="/new-creator" className="register">Become a creator to start earning money</Link>
                     </div>    
                     <div className="creator-profile">
                         <img alt="profile" src="https://boredhumans.b-cdn.net/faces2/13.jpg"></img>
                         <div className="creator-info">
                             <div className="info-top">
-                                <span className="creator-name">John Doe </span> 
-                                <a href={"https://kovan.etherscan.io/address/0x71435bf2d0766293f1c761e3ff7916aae1346642"}>(View on Etherscan)</a>
+                                <span className="creator-name">{displayName}</span> 
+                                <a rel="noopener noreferrer" target="_blank" href={"https://kovan.etherscan.io/address/" + poolAddress}>(View on Etherscan)</a>
                             </div>
                             <div className="info-bottom">
-                                <span className="creator-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</span>
+                                <span className="creator-bio">{bio}</span>
                             </div>
                         </div>
                     </div>
@@ -227,7 +249,7 @@ function Creator(props: {poolFactory: ethers.Contract,
                             <h2>MY LINKS</h2>
                             <div className="middle-text">
                                 <ul>
-                                    <li><a rel="noopener noreferrer" target="_blank" href="https://youtube.com">youtube.com/JohnDoeTV</a></li>
+                                    {links.map((link, i) => (<li key={i}><a rel="noopener noreferrer" target="_blank" href={link}>{link}</a></li>))} 
                                 </ul>
                             </div>
                         </div>

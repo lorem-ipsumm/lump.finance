@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 // import DeckPreview from '../components/DeckPreview';
 // import Loading from './Loading';
 import "../css/main.css";
 import "../css/resize.css";
-import Creator from './Creator';
+import NewCreator from '../pages/NewCreator';
+import Creator from '../pages/Creator';
 import Loading from './Loading';
 import Particles from 'react-particles-js';
 import { ethers } from "ethers";
@@ -77,6 +79,8 @@ export function Dapp() {
         // artifact. You can do this same thing with your contracts.
         setPoolFactory(contract);
 
+        setInitialized(true);
+
         return;
 
 
@@ -102,7 +106,6 @@ export function Dapp() {
         try {
             [selectedAddress] = await window.ethereum.enable();
         } catch (err) {
-            console.log()
             setInitialized(true);
             return;
         }
@@ -144,45 +147,33 @@ export function Dapp() {
     // run on load
     useEffect(() => {
 
+        // check for wallet
+        if (window.ethereum === undefined){
+            // return;
+            setInitialized(true);
+            return;
+        }
 
-        // this is fake loading for now
-        setTimeout(() => {
-
-            // check for wallet
-            if (window.ethereum === undefined){
-                // return;
-                setInitialized(true);
-                return;
-            }
-
-
-            if (connectedAddress === "") {
-                connectWallet();
-            } else {
-                setInitialized(true);
-            }
-        }, 1000);
+        connectWallet();
 
     // eslint-disable-next-line
     }, [connectedAddress]);
 
 
-   if (!initialized) {
-       return(
-            <div className="page-wrapper">
+    return(
+        <div className="page-wrapper">
+            <Router>
                 <Particles params={params}/>
-                <Loading/>
-            </div>
-       );
-    } else {
-        return(
-            <div className="page-wrapper">
-                <Particles params={params}/>
-                <Creator poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>
-            </div>
-        );
-    }
-    
+                <Route path="/creator/" component={() => 
+                    <Creator initialized={initialized} poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>
+                }></Route>
+                <Route path="/new-creator/" component={() => 
+                    <NewCreator connectedAddress={connectedAddress} poolFactory={poolFactory}/>
+                }></Route>
+            </Router>
+        </div>
+    );
+
 }
 
 

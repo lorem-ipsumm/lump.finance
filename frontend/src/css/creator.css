@@ -60,6 +60,11 @@
 
 .creator-profile .creator-info .creator-name {
   font-size: 16pt;
+  margin-right: 10px;
+}
+
+.creator-profile .creator-info a {
+  color: black;
 }
 
 .creator-profile .creator-info div {

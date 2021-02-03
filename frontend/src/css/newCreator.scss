@@ -1,0 +1,76 @@
+.creator-form{
+    background: white;
+    padding: 30px 20px;
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.17);
+    border-radius: 3px;
+    max-width: 500px;
+    max-height: 650px;
+    overflow-y: auto;
+    animation: zoom-in 1s ease;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16pt;
+    background-color: #49CD66;
+    border: none;
+    // border-radius: ;
+}
+
+.notice {
+    margin-top: 15px;
+    max-width: 100%;
+    display: block;
+    text-align: center;
+    font-size: 11pt;
+}
+
+.input-section {
+
+    margin-bottom: 50px;
+
+    input {
+        font-size: 16pt;
+        width: 100%;
+        padding: 10px;
+        background: #E5E5E5;
+        border: none;
+    }
+
+    textarea {
+        font-size: 16pt;
+        width: 100%;
+        min-height: 90px;
+        padding: 10px;
+        background: #E5E5E5;
+        border: none;
+    }
+
+    .label-wrapper {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
+        font-size: 15pt;
+        svg {
+            margin-right: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    }
+
+}
+
+@keyframes zoom-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

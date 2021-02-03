@@ -17,7 +17,7 @@ import { Transfer } from "./Transfer";
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 import { NoTokensMessage } from "./NoTokensMessage";
-import { Creator } from "./Creator";
+import { Creator } from "../pages/Creator";
 import { Loading } from "./Loading";
 
 import "../css/main.css";
