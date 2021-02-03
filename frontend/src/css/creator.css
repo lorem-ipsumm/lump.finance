@@ -15,6 +15,7 @@
   -webkit-transition: all ease 0.3s;
   transition: all ease 0.3s;
   border-radius: 3px;
+  overflow: hidden;
   -webkit-animation: zoom-in 1s ease;
           animation: zoom-in 1s ease;
 }

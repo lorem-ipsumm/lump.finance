@@ -6,7 +6,6 @@ import "../css/main.css";
 import "../css/resize.css";
 import NewCreator from '../pages/NewCreator';
 import Creator from '../pages/Creator';
-import Loading from './Loading';
 import Particles from 'react-particles-js';
 import { ethers } from "ethers";
 import contractAddress from "../contracts/contract-address.json";
