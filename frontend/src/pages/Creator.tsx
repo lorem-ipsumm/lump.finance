@@ -199,7 +199,7 @@ function Creator(props: {poolFactory: ethers.Contract,
         const gasPrice = await getGasPrice();
 
         // deposit amount
-        await poolContract.deposit({value: value, gasLimit:8000000, gasPrice: gasPrice * 1e9});
+        await poolContract.deposit({value: value, gasLimit:900000, gasPrice: gasPrice * 1e9});
 
     }
 
@@ -220,7 +220,7 @@ function Creator(props: {poolFactory: ethers.Contract,
         const gasPrice = await getGasPrice();
 
         // deposit amount
-        await poolContract.withdraw(userBalance, {gasLimit:8000000, gasPrice: gasPrice * 1e9});
+        await poolContract.withdraw(userBalance, {gasLimit:900000, gasPrice: gasPrice * 1e9});
 
     }
 

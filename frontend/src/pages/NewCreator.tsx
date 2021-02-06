@@ -5,6 +5,7 @@ import db from '../components/firestore';
 import Loading from '../components/Loading';
 import { useHistory } from "react-router-dom";
 import { ethers } from 'ethers';
+import axios from 'axios';
 
 /**
  * Form for creating new creator pages
@@ -17,6 +18,21 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
     const[links, setLinks] = useState<string[]>([]);
     const history = useHistory();
 
+    // get latest gas prices 
+    async function getGasPrice(speed?: string) {
+        
+        // make request w/ axios
+        const price = await axios.get('https://ethgasstation.info/api/ethgasAPI.json?api-key=' + process.env.DEFI_PULSE_KEY)
+
+        if (speed === "fastest")
+            return(parseInt(price.data.fastest)/10);
+        else if (speed === "fast")
+            return(parseInt(price.data.fast)/10);
+        else 
+            return(parseInt(price.data.average)/10);
+
+    }
+
     // handle form submission
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 
@@ -24,9 +40,12 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
         e.preventDefault();
 
 
+        // get current gas prices
+        const gasPrice = await getGasPrice();
+
         // create a new pool
         try {
-            const tx = await props.poolFactory.newPool(props.connectedAddress);
+            const tx = await props.poolFactory.newPool(props.connectedAddress,{gasLimit:900000, gasPrice: gasPrice * 1e9});
             await tx.wait();
         } catch (err) {
             console.log(err);

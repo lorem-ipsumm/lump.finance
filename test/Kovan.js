@@ -117,7 +117,7 @@ describe("Pools", function () {
     // mined.
     // poolFactoryContract = await poolFactory.deploy();
     poolFactoryContract = new ethers.Contract(
-      "0xfd0b6580bFc9DD1d45E21aDab7c651449B82D54B", 
+      "0x3C3af302c49BAcf3F55f91f2437E12c3CC7dB4eC", 
       poolFactory.interface, 
       owner.provider
     );
@@ -140,12 +140,29 @@ describe("Pools", function () {
 
     this.timeout(50000);
 
+    it("Should create a new pool", async function () {
+
+      return;
+
+      pools = await poolFactoryContract.connect(owner).getPools();
+
+      let numPoolsBefore = pools.length;
+
+      await poolFactoryContract.connect(owner).newPool(owner.address);
+
+      pools = await poolFactoryContract.connect(owner).getPools();
+
+      let numPoolsAfter = pools.length;
+
+      expect(numPoolsAfter).to.be.gt(numPoolsBefore);
+
+    });
+
     it("Should get my deposited balance", async function() {
 
       return;
 
-
-      let targetPool = pools[0];
+      let targetPool = pools[pools.length - 1];
 
       // get the last pool
       const pool1 = new ethers.Contract(targetPool, pool.interface, owner);
@@ -161,20 +178,94 @@ describe("Pools", function () {
 
     });
 
+    it("Should do a round trip", async function () {
+
+      ///////// CREATE 
+
+      pools = await poolFactoryContract.connect(owner).getPools();
+      console.log(pools);
+
+      let numPoolsBefore = pools.length;
+      console.log(pools.length);
+
+      await poolFactoryContract.connect(owner).newPool(owner.address);
+
+      pools = await poolFactoryContract.connect(owner).getPools();
+
+      let numPoolsAfter = pools.length;
+      console.log(pools.length);
+
+      expect(numPoolsAfter).to.be.gt(numPoolsBefore)
+
+      console.log("creation successful")
+
+      ///////// DEPSOIT 
+
+      // get pool
+      let targetPool = pools[pools.length - 1];
+      console.log(targetPool);
+
+      // get the last pool
+      let pool1 = new ethers.Contract(targetPool, pool.interface, owner);
+
+      let stake = 0.03;
+
+      // let bal = await pool1.connect(owner).getTotalBalance();
+      // console.log(bal.toString());
+
+      let value = ethers.utils.parseEther(stake.toString());
+
+      await pool1.connect(owner).deposit({value: value, gasLimit: 900000,gasPrice:1000000000});
+      // await pool1.connect(owner).withdraw({value: "5000000000000000000"});
+
+      let userBalance = await pool1.balanceOf(owner.address);
+      userBalance = parseFloat(userBalance.toString());
+
+      expect(userBalance).to.be.gt(0);
+
+      console.log("deposit successful")
+
+      ///////// WITHDRAW
+
+      // targetPool = pools[pools.length - 1] ;
+
+      // get the last pool
+      // let pool1 = new ethers.Contract(targetPool, pool.interface, owner);
+
+      // get balance
+      userBalance = await pool1.balanceOf(owner.address);
+
+      // let bal = await pool1.connect(owner).getTotalBalance();
+      // console.log(bal.toString());
+
+      // withdraw balance
+      await pool1.withdraw(userBalance, {gasLimit:8000000, gasPrice:1000000000});
+
+      userBalance = await pool1.balanceOf(owner.address);
+
+      expect(userBalance).to.be.eq(0);
+
+      console.log("withdraw successful")
+
+
+    });
+
     it("Should withdraw from Kovan pool", async function() {
 
-      let targetPool = pools[0];
+      return;
+
+
+      let targetPool = pools[pools.length - 1] ;
 
       // get the last pool
       const pool1 = new ethers.Contract(targetPool, pool.interface, owner);
 
       // get balance
       let userBalance = await pool1.balanceOf(owner.address);
-      let amount = "11802015251953149519669";
-
+      // let amount = "11802015251953149519669";
 
       // withdraw balance
-      await pool1.withdraw(amount, {gasLimit:8000000, gasPrice:1000000000});
+      await pool1.withdraw(userBalance, {gasLimit:8000000, gasPrice:1000000000});
 
       userBalance = await pool1.balanceOf(owner.address);
 
@@ -187,9 +278,8 @@ describe("Pools", function () {
 
       return;
 
-
       // get pool
-      let targetPool = pools[0];
+      let targetPool = pools[pools.length - 1];
 
       // get the last pool
       const pool1 = new ethers.Contract(targetPool, pool.interface, owner);
@@ -209,7 +299,7 @@ describe("Pools", function () {
 
       let value = ethers.utils.parseEther(stake.toString());
 
-      await pool1.connect(owner).deposit({value: value, gasLimit:8000000, gasPrice:1000000000});
+      await pool1.connect(owner).deposit({value: value, gasLimit: 900000,gasPrice:1000000000});
       // await pool1.connect(owner).withdraw({value: "5000000000000000000"});
 
       let userBalance = await pool1.balanceOf(owner.address);

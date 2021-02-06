@@ -48,7 +48,7 @@ contract Pool {
     address public UNISWAP_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
 
     // kovan aave lending pool
-    address public LENDING_POOL = 0x9FE532197ad76c5a68961439604C037EB79681F0;
+    address public LENDING_POOL = 0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe;
 
     // store addres -> account mapping
     mapping(address => uint256) balances;
@@ -146,19 +146,7 @@ contract Pool {
 
         // setup token to be swapped
         IERC20 token = IERC20(_token);
-        // console.log("");
-        // console.log("sender: ", msg.sender);
 
-        // approval is called outside of contract
-        // token.approve(address(msg.sender), _amountIn);
-
-        // console.log("contract: ", address(this));
-        // console.log("token balance before transfer:", token.balanceOf(msg.sender));
-
-        // console.log("amountIn: ", _amountIn);
-        // console.log("amountOutMin: ", _amountOutMin);
-
-        // require(_amountIn >= _amountOutMin, 'Unisw!apV2Router: INSUFFICIENT_OUTPUT_AMOUNT');
 
         // transfer tokens to smart contract
         // require(token.transferFrom(msg.sender, address(this), _amountIn), 'transferFrom failed.');
@@ -182,7 +170,7 @@ contract Pool {
         // execute swap through uniswap and return ETH to user
         uniswap.swapExactTokensForETH(
             _amountIn,
-            _amountOutMin,
+            amountOutMin,
             path,
             _to,
             block.timestamp
@@ -253,17 +241,52 @@ contract Pool {
         // setup stablecoin 
         IERC20 stable = IERC20(DAI);
 
+        // setup aToken reference
+        IERC20 aToken = IERC20(aDAI);
+
+        // 
+        uint aTokenAmount = aToken.balanceOf(address(this));
+
+        require(aToken.approve(LENDING_POOL, aTokenAmount), "aToken approval failed");
+
+        require(aToken.allowance(address(this), LENDING_POOL) > 0, "allowance too low");
+
+
+        // ensure balance is high enough
+        require(stable.balanceOf(address(this)) == 0, "There shouldn't be stablecoins");
+
         // withdraw tokens from the lending pool
-        aave.withdraw(address(stable), amount, address(this));
+        // -1 for all 
+        require(aave.withdraw(address(stable), aTokenAmount, address(this)) > 0, "withdraw failed");
+
+        // ensure balance is high enough
+        require(stable.balanceOf(address(this)) > 0, "There should be stablecoins");
+
+
+        // get amount of stablecoins to swapped with eth
+        uint amountStable = stable.balanceOf(address(this));
+
+        require(amountStable > 0, "no stablecoins!");
 
         // swap tokens back to ETH and send to user
-        swapExactTokensForETH(address(stable), msg.sender, amount, 0);
+        swapExactTokensForETH(address(stable), msg.sender, amountStable, 0);
+
+        // ensure balance is high enough
+        require(stable.balanceOf(address(this)) == 0, "There shouldn't be stablecoins again");
 
         // update mapping
-        balances[msg.sender] -= amount;
+        if (balances[msg.sender] - amountStable < 0) {
+            balances[msg.sender] = 0;
+        } else {
+            balances[msg.sender] -= amountStable;
+        }
 
         // update pool balance
-        totalBalance -= amount;
+        if (totalBalance - amountStable < 0) {
+            totalBalance = 0;
+        } else {
+            totalBalance -= amountStable;
+        }
 
     }
 
