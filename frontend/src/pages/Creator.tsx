@@ -31,6 +31,7 @@ function Creator(props: {poolFactory: ethers.Contract,
     const[walletBalance, setWalletBalance] = useState<number>(0);
     const[inputAmount, setInputAmount] = useState<number>(0);
     const[depositBalance, setDepositBalance] = useState<number>(0);
+    const[depositBalanceETH, setDepositBalanceETH] = useState<number>(0);
     const[poolContract, setPoolContract] = useState<ethers.Contract>();
     const[poolBalance, setPoolBalance] = useState<number>(0);
     const[dataLoaded, setDataLoaded] = useState<boolean>(false);
@@ -129,8 +130,19 @@ function Creator(props: {poolFactory: ethers.Contract,
         const bal = await contract.balanceOf(props.connectedAddress);
         const formattedBal = parseFloat(ethers.utils.formatEther(bal.toString()));
 
+        // weth address
+        let weth = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+
+        // get price of eth
+        const priceRequest = await axios.get('https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&vs_currencies=usd')
+        const price = parseFloat(priceRequest.data[weth].usd);
+
         // set balance
         setDepositBalance(formattedBal);
+
+        if (formattedBal > 0)
+            setDepositBalanceETH(price/formattedBal)
+
 
         return bal;
 
@@ -287,7 +299,7 @@ function Creator(props: {poolFactory: ethers.Contract,
             <div className="page-wrapper">
                 <div className="creator-wrapper">
                     <div className="creator-header">
-                        <span className="pool-balance">Money Pooled: ${poolBalance} USD</span>
+                        <span className="pool-balance">Money Pooled: ${poolBalance.toFixed(5)} USD</span>
                         <Link to="/new-creator" className="register">Create your own page here</Link>
                     </div>    
                     <div className="creator-profile">
@@ -333,8 +345,8 @@ function Creator(props: {poolFactory: ethers.Contract,
                         <div className="creator-actions">
                             <div className="input-wrapper">
                                 <input type="number" className="input-amount" placeholder="Insert Amount in ETH" onChange={(e) => {setInputAmount(parseFloat(e.target.value))}}></input>
-                                <span className="balance-amount">Wallet Balance: {walletBalance.toPrecision(4)} ETH</span>
-                                <span className="balance-amount">Deposit Balance: ${depositBalance} USD</span>
+                                <span className="balance-amount">Wallet Balance: {walletBalance.toFixed(2)} ETH</span>
+                                <span className="balance-amount">Your Deposit: ${depositBalance.toFixed(2)} USD</span>
                             </div>
                             <div className="button-wrapper">
                                 <button className="btn-deposit" onClick={depositClicked}>Deposit</button>

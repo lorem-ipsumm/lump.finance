@@ -59,7 +59,7 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
 
         // create a new pool
         try {
-            const tx = await props.poolFactory.newPool(props.connectedAddress,{gasPrice: 10 * 1e9});
+            const tx = await props.poolFactory.newPool(props.connectedAddress,{gasPrice: 5 * 1e9});
             await tx.wait();
         } catch (err) {
             console.log(err);
