@@ -117,7 +117,7 @@ describe("Pools", function () {
     // mined.
     // poolFactoryContract = await poolFactory.deploy();
     poolFactoryContract = new ethers.Contract(
-      "0x3C3af302c49BAcf3F55f91f2437E12c3CC7dB4eC", 
+      "0x9E006cD749fE5d8C1412059f93Fb46F385bE0C8b", 
       poolFactory.interface, 
       owner.provider
     );
@@ -233,17 +233,20 @@ describe("Pools", function () {
       // let pool1 = new ethers.Contract(targetPool, pool.interface, owner);
 
       // get balance
-      userBalance = await pool1.balanceOf(owner.address);
+      let bal1 = await pool1.balanceOf(owner.address);
 
       // let bal = await pool1.connect(owner).getTotalBalance();
       // console.log(bal.toString());
 
       // withdraw balance
-      await pool1.withdraw(userBalance, {gasLimit:8000000, gasPrice:1000000000});
+      await pool1.withdraw(bal1, {gasLimit:8000000, gasPrice:1000000000});
 
-      userBalance = await pool1.balanceOf(owner.address);
+      bal1 = ethers.utils.formatEther(bal1.toString());
 
-      expect(userBalance).to.be.eq(0);
+      bal2= await pool1.balanceOf(owner.address);
+      bal2 = ethers.utils.formatEther(bal2.toString());
+
+      expect(parseFloat(bal2)).to.be.lt(parseFloat(bal1));
 
       console.log("withdraw successful")
 

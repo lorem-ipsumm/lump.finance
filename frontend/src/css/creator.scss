@@ -54,6 +54,14 @@
        font-weight: bold; 
     }
 
+    .creator-withdraw {
+        font-weight: bold;
+        display: block;
+        text-decoration: underline;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
     img {
         width: 100px;
         height: 100px;

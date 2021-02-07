@@ -164,7 +164,7 @@ export function Dapp() {
             <Router>
                 <Particles params={params}/>
                 <Route exact path="/" component={() => 
-                    <Creator initialized={initialized} poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>
+                    <NewCreator  poolFactory={poolFactory}  connectedAddress={connectedAddress}/>
                 }></Route>
                 <Route path="/creator/" component={() => 
                     <Creator initialized={initialized} poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>

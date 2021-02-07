@@ -15,7 +15,7 @@ import "./UniswapV2Interfaces.sol";
 contract Pool {
 
     // creator who can withdraw interest
-    address public owner;
+    address private owner;
 
     // uniswap interface
     IUniswap uniswap;
@@ -27,28 +27,28 @@ contract Pool {
     // address public DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
 
     // kovan DAI 
-    address public DAI = 0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD;
+    address private DAI = 0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD;
 
     // kovan aDAI
-    address public aDAI = 0xdCf0aF9e59C002FA3AA091a46196b37530FD48a8;
+    address private aDAI = 0xdCf0aF9e59C002FA3AA091a46196b37530FD48a8;
 
     // kovan USDC 
-    address public USDC = 0xdCFaB8057d08634279f8201b55d311c2a67897D2;
+    address private USDC = 0xdCFaB8057d08634279f8201b55d311c2a67897D2;
 
     // kovan aUSDC
-    address public aUSDC = 0xF9155b335FAa6C184aB2F2c4D5939d86268F3668;
+    address private aUSDC = 0xF9155b335FAa6C184aB2F2c4D5939d86268F3668;
 
     // mainnet usdc 
-    // address public USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
+    // address private USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
 
     // mainnet aUSDC
-    // address public aUSDC = 0xBcca60bB61934080951369a648Fb03DF4F96263C;
+    // address private aUSDC = 0xBcca60bB61934080951369a648Fb03DF4F96263C;
 
     // kovan/mainnet uniswap router
-    address public UNISWAP_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
+    address private UNISWAP_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
 
     // kovan aave lending pool
-    address public LENDING_POOL = 0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe;
+    address private LENDING_POOL = 0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe;
 
     // store addres -> account mapping
     mapping(address => uint256) balances;
@@ -89,8 +89,8 @@ contract Pool {
     address _to,
     uint _amountOutMin,
     uint _deadline)
-    public 
-    payable {
+    internal 
+    {
 
         uint amountOutMin;
 
@@ -139,7 +139,7 @@ contract Pool {
     address _to,
     uint _amountIn,
     uint _amountOutMin)
-    public 
+    internal 
     {
 
         uint amountOutMin;
@@ -229,11 +229,13 @@ contract Pool {
 
     }
 
+
+
     /**
      * Withdraw tokens from this pool
      * @param amount: amount to be withdrawn from the pool
      */
-    function withdraw(uint amount) external {
+    function withdraw(uint amount) public {
 
         // ensure balance is high enough
         require(amount <= balances[msg.sender], "Attempting to withdraw more than deposited");
@@ -287,6 +289,54 @@ contract Pool {
         } else {
             totalBalance -= amountStable;
         }
+
+    }
+
+    /**
+     * Withdraw the accrued interest from the pool
+     */
+    function creatorWithdraw() external {
+        
+        // ensure that the owner is the caller
+        require(msg.sender == owner, "Only the owner of the pool can call this method");
+
+        // setup aToken reference
+        IERC20 aToken = IERC20(aDAI);
+
+        // setup stablecoin 
+        IERC20 stable = IERC20(DAI);
+
+        // get the amount of aTokens currently in the contract
+        uint aTokenAmount = aToken.balanceOf(address(this));
+
+        require(aToken.approve(LENDING_POOL, aTokenAmount), "aToken approval failed");
+
+        // withdraw tokens from the lending pool
+        // -1 for all 
+        require(aave.withdraw(address(stable), aTokenAmount - totalBalance, owner) > 0, "withdraw failed");
+
+        // subtract the amount of aTokens by the total amount deposited by fans
+        // balances[msg.sender] = aTokenAmount - totalBalance;
+
+        // withdraw(amount);
+
+        // reset amount available
+        // balances[msg.sender] -= amount;
+
+    }
+
+    /**
+     * Get the amount of stablecoin that the creator is allowed to withdraw
+     */
+    function getCreatorBalance() external view returns (uint) {
+
+        IERC20 aToken = IERC20(aDAI);
+
+        // get the amount of aTokens currently in the contract
+        uint aTokenAmount = aToken.balanceOf(address(this));
+
+        // subtract the amount of aTokens by the total amount deposited by fans
+        return(aTokenAmount - totalBalance);
 
     }
 

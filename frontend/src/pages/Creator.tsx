@@ -8,7 +8,13 @@ import { ethers } from "ethers";
 import PoolAritfact from "../contracts/Pool.json";
 import axios from 'axios';
 import db from '../components/firestore';
+import { useHistory } from "react-router-dom";
+import { tokens } from "../components/tokens";
 // import contractAddress from "../contracts/contract-address.json";
+
+
+
+
 
 
 /**
@@ -32,6 +38,9 @@ function Creator(props: {poolFactory: ethers.Contract,
     const[bio, setBio] = useState<string>("");
     const[links, setLinks] = useState<string[]>([]);
     const[poolAddress, setPoolAddress] = useState<string>("");
+    const[isOwner, setIsOwner] = useState<boolean>(false);
+    const[creatorBalance, setCreatorBalance] = useState<number>(0); 
+    const history = useHistory();
 
     async function initialize() {
 
@@ -86,7 +95,27 @@ function Creator(props: {poolFactory: ethers.Contract,
     async function getPoolBalance(contract: ethers.Contract) {
         
         // get user balance
-        let bal = await contract.getTotalBalance();
+        // let bal = await contract.getTotalBalance();
+
+        // setup contract
+        const aDAI = new ethers.Contract(
+            tokens.aDAI.address,
+            tokens.aDAI.abi,
+            props.provider.getSigner(0)
+        );
+
+        // get contract balance of aDAI
+        let bal = await aDAI.balanceOf(contract.address);
+
+        // is the user the owner of the pool
+        // TODO: it may be safe to not do this clientside
+        // I'm not sure if people can just impersonate other wallets
+        if (isOwner) {
+            // get the creators balance
+            let cBal = await contract.getCreatorBalance();
+            cBal = ethers.utils.formatEther(cBal.toString());
+            setCreatorBalance(parseFloat(cBal));
+        }
 
         // set balance
         setPoolBalance(parseFloat(ethers.utils.formatEther(bal.toString())));
@@ -115,7 +144,7 @@ function Creator(props: {poolFactory: ethers.Contract,
             getDepositBalance(poolContract);
           }
 
-    }, 5000)
+    }, 2000)
 
     // run on load
     useEffect(() => {
@@ -126,7 +155,7 @@ function Creator(props: {poolFactory: ethers.Contract,
             initialize(); 
         },1000);
 
-    }, []);
+    }, [poolBalance]);
 
     // get latest gas prices 
     async function getGasPrice(speed?: string) {
@@ -151,8 +180,18 @@ function Creator(props: {poolFactory: ethers.Contract,
         addr = addr.substr(addr.lastIndexOf("/") + 1);
 
         // check if addr is valid. if not use default
-        if (addr.length !== 42)
-            addr = "0x39a7baa3fcb68ad38377ea4ebb402296dd69d981";
+        if (addr.length !== 42 && props.connectedAddress === "") {
+            // addr = "0x39a7baa3fcb68ad38377ea4ebb402296dd69d981";
+            history.push("/new-creator/");
+        } else if (addr.length !== 42 && props.connectedAddress !== "") {
+            // load the account based on the connected wallet if it is connected
+            addr = props.connectedAddress;
+            history.push("/creator/" + props.connectedAddress);
+        }
+
+        // check if this is the owner's page
+        if (addr.toLocaleLowerCase() === props.connectedAddress.toLowerCase())
+            setIsOwner(true);
 
         var ref = db.collection("users").doc(addr);
 
@@ -199,7 +238,7 @@ function Creator(props: {poolFactory: ethers.Contract,
         const gasPrice = await getGasPrice();
 
         // deposit amount
-        await poolContract.deposit({value: value, gasLimit:900000, gasPrice: gasPrice * 1e9});
+        await poolContract.deposit({value: value, gasLimit:900000, gasPrice: 10 * 1e9});
 
     }
 
@@ -220,7 +259,26 @@ function Creator(props: {poolFactory: ethers.Contract,
         const gasPrice = await getGasPrice();
 
         // deposit amount
-        await poolContract.withdraw(userBalance, {gasLimit:900000, gasPrice: gasPrice * 1e9});
+        await poolContract.withdraw(userBalance, {gasLimit:900000, gasPrice: 10 * 1e9});
+
+    }
+
+    // withdraw creator's deposit from ppol
+    async function creatorWithdrawClicked() {
+
+        // no can do
+        if (poolContract === undefined)
+            return;
+
+        // get the amount to withdraw
+        let amount = ethers.utils.parseEther(creatorBalance.toString());
+
+
+        // get current gas prices
+        const gasPrice = await getGasPrice();
+
+        // deposit amount
+        await poolContract.creatorWithdraw(amount, {gasLimit:900000, gasPrice: 10 * 1e9});
 
     }
 
@@ -229,11 +287,10 @@ function Creator(props: {poolFactory: ethers.Contract,
             <div className="page-wrapper">
                 <div className="creator-wrapper">
                     <div className="creator-header">
-                        <span className="pool-balance">Money Pooled: ${poolBalance.toPrecision(4)}</span>
+                        <span className="pool-balance">Money Pooled: ${poolBalance} USD</span>
                         <Link to="/new-creator" className="register">Create your own page here</Link>
                     </div>    
                     <div className="creator-profile">
-                        <img alt="profile" src="https://boredhumans.b-cdn.net/faces2/13.jpg"></img>
                         <div className="creator-info">
                             <div className="info-top">
                                 <span className="creator-name">{displayName}</span> 
@@ -241,6 +298,13 @@ function Creator(props: {poolFactory: ethers.Contract,
                             </div>
                             <div className="info-bottom">
                                 <span className="creator-bio">{bio}</span>
+                            {isOwner ? 
+                                <div className="creator-withdraw-wrapper">
+                                    <span className="creator-withdraw"onClick={creatorWithdrawClicked} >Available for withdraw: ${creatorBalance} USD</span>
+                                </div>
+                            :
+                                <div></div>
+                            }
                             </div>
                         </div>
                     </div>
@@ -270,7 +334,7 @@ function Creator(props: {poolFactory: ethers.Contract,
                             <div className="input-wrapper">
                                 <input type="number" className="input-amount" placeholder="Insert Amount in ETH" onChange={(e) => {setInputAmount(parseFloat(e.target.value))}}></input>
                                 <span className="balance-amount">Wallet Balance: {walletBalance.toPrecision(4)} ETH</span>
-                                <span className="balance-amount">Deposit Balance: ${depositBalance.toPrecision(4)} USD</span>
+                                <span className="balance-amount">Deposit Balance: ${depositBalance} USD</span>
                             </div>
                             <div className="button-wrapper">
                                 <button className="btn-deposit" onClick={depositClicked}>Deposit</button>

@@ -76,6 +76,14 @@
   font-weight: bold;
 }
 
+.creator-profile .creator-withdraw {
+  font-weight: bold;
+  display: block;
+  text-decoration: underline;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
 .creator-profile img {
   width: 100px;
   height: 100px;

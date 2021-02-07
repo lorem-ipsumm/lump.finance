@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../css/newCreator.css";
-import { Info, Link, User } from 'react-feather';
+import { Info, Link, User, } from 'react-feather';
 import db from '../components/firestore';
 import Loading from '../components/Loading';
 import { useHistory } from "react-router-dom";
@@ -15,8 +15,9 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
 
     const[displayName, setDisplayName] = useState<string>("");
     const[bio, setBio] = useState<string>("");
-    const[links, setLinks] = useState<string[]>([]);
+    const[links, setLinks] = useState<string[]>(["", ""]);
     const history = useHistory();
+    const[numLinks, setNumLinks] = useState<number>(0);
 
     // get latest gas prices 
     async function getGasPrice(speed?: string) {
@@ -39,13 +40,26 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
         // prevent refresh
         e.preventDefault();
 
-
         // get current gas prices
         const gasPrice = await getGasPrice();
 
+        // get all of the link inputs
+        let inputs = document.querySelectorAll(".link-input");
+        console.log(inputs);
+
+        let socialLinks = [];
+
+        // go through the inputs and get the links
+        for (let i = 0; i < inputs.length; i++) {
+            let input:HTMLInputElement = inputs[i] as HTMLInputElement;
+            if (input.value !== "")
+                socialLinks.push(input.value);
+        }
+
+
         // create a new pool
         try {
-            const tx = await props.poolFactory.newPool(props.connectedAddress,{gasLimit:900000, gasPrice: gasPrice * 1e9});
+            const tx = await props.poolFactory.newPool(props.connectedAddress,{gasPrice: 10 * 1e9});
             await tx.wait();
         } catch (err) {
             console.log(err);
@@ -58,7 +72,7 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
         db.collection("users").doc(props.connectedAddress).set({
             name: displayName,
             bio: bio,
-            links: links,
+            links: socialLinks,
             pool: pools[pools.length - 1]
         })
         .then(function() {
@@ -87,7 +101,7 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
                             <User/>
                             <label>Display Name</label>
                         </div>
-                        <input type="text" placeholder="Input your profile name" onChange={(e) => setDisplayName(e.target.value)}></input>
+                        <input type="text" placeholder="John Doe Art" onChange={(e) => setDisplayName(e.target.value)}></input>
                     </div>
                     <div className="input-section">
                         <div className="label-wrapper">
@@ -101,7 +115,10 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
                             <Link/>
                             <label>Social Links</label>
                         </div>
-                        <input type="text" placeholder="youtube.com/JohnDoeTV" ></input>
+                        {links.map((link, i) => (
+                            <input className="link-input" key={i} type="text" placeholder="youtube.com/JohnDoeTV" ></input>
+                        ))} 
+                        <button type="button" onClick={() => setLinks([...links, ""])} className="btn-new-link">Add Another Link</button>
                     </div>
                     <button type="submit" value="Submit" >Submit</button>
                     <span className="notice">*All of this can be updated later. After submitting you will be asked to pay a transaction fee for a new pool to be created for you. Once your transaction is submitted you'll be good to go!</span>

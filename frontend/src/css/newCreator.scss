@@ -26,6 +26,10 @@ button {
     font-size: 11pt;
 }
 
+button:hover {
+    filter: brightness(90%);
+}
+
 .input-section {
 
     margin-bottom: 50px;
@@ -38,6 +42,17 @@ button {
         border: none;
     }
 
+    .link-input {
+        margin-bottom: 10px;
+    }
+
+    .btn-new-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // border: 2px solid black;
+    }
+
     textarea {
         font-size: 16pt;
         width: 100%;
@@ -46,6 +61,8 @@ button {
         background: #E5E5E5;
         border: none;
     }
+
+
 
     .label-wrapper {
         display: flex;

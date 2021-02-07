@@ -1,6 +1,7 @@
 // This is a script for deploying your contracts. You can adapt it to deploy
 
-const { ethers } = require("hardhat");
+const { ethers, artifacts } = require("hardhat");
+let addresses = {};
 
 // yours, or create new ones.
 async function main() {
@@ -20,7 +21,10 @@ async function main() {
     await deployer.getAddress()
   );
 
-  console.log("Account balance:", (await deployer.getBalance()).toString());
+  // console.log("Account balance:", (await deployer.getBalance()).toString());
+
+  let bal1 = await deployer.getBalance();
+  bal1 = ethers.utils.formatEther(bal1.toString());
 
   // const Token = await ethers.getContractFactory("Token");
   // const token = await Token.deploy();
@@ -31,14 +35,24 @@ async function main() {
   const poolFactory = await PoolFactory.deploy();
   await poolFactory.deployed();
 
-  console.log("Contract address:", poolFactory.address);
+  const Pool = await ethers.getContractFactory("Pool");
+  const pool = await Pool.deploy(deployer.address);
+  await pool.deployed();
+
+  let bal2 = await deployer.getBalance();
+  bal2 = ethers.utils.formatEther(bal2.toString());
+
+  const cost = parseFloat(bal1) - parseFloat(bal2);
+
+  // console.log("Contract address:", poolFactory.address);
+  console.log(`Cost: ${cost} ${ethers.constants.EtherSymbol}`);
 
   // We also save the contract's artifacts and address in the frontend directory
-  // saveFrontendFiles(token);
+  saveFrontendFiles(pool, "Pool");
+  saveFrontendFiles(poolFactory, "PoolFactory");
 }
 
-/*
-function saveFrontendFiles(token) {
+function saveFrontendFiles(contract, name) {
   const fs = require("fs");
   const contractsDir = __dirname + "/../frontend/src/contracts";
 
@@ -46,19 +60,24 @@ function saveFrontendFiles(token) {
     fs.mkdirSync(contractsDir);
   }
 
+  // add contract name: address pair
+  addresses[name] = contract.address;
+
   fs.writeFileSync(
     contractsDir + "/contract-address.json",
-    JSON.stringify({ Token: token.address }, undefined, 2)
+    JSON.stringify(addresses, undefined, 2)
   );
 
-  const TokenArtifact = artifacts.readArtifactSync("Token");
+  // const PoolArtifact = artifacts.readArtifactSync("Pool");
+  // const PoolFactoryArtifact = artifacts.readArtifactSync("PoolFactory");
+  const artifact = artifacts.readArtifactSync(name);
 
   fs.writeFileSync(
-    contractsDir + "/Token.json",
-    JSON.stringify(TokenArtifact, null, 2)
+    contractsDir + `/${name}.json`,
+    JSON.stringify(artifact, null, 2)
   );
+ 
 }
-*/
 
 main()
   .then(() => process.exit(0))
