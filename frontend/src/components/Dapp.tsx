@@ -10,6 +10,8 @@ import Particles from 'react-particles-js';
 import { ethers } from "ethers";
 import contractAddress from "../contracts/contract-address.json";
 import PoolFactoryArtifact from "../contracts/PoolFactory.json";
+import useInterval from '../components/UseInterval'
+import Loading from './Loading';
 
 
 // ethereum.window fix
@@ -29,6 +31,8 @@ export function Dapp() {
     const[connectedAddress, setConnectedAddress] = useState<string>("");
     const[initialized, setInitialized] = useState<boolean>(false);
     const[provider, setProvider] = useState<any>(undefined);
+    const[networkId, setNetworkId] = useState<number>(-1);
+    const[noWallet, setNoWallet] = useState<boolean>(true);
     const[poolFactory, setPoolFactory] = useState<ethers.Contract>(new ethers.Contract(
         contractAddress.PoolFactory,
         PoolFactoryArtifact.abi
@@ -64,6 +68,10 @@ export function Dapp() {
 
         const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
 
+        await web3Provider.ready;
+
+        setNetworkId(web3Provider._network.chainId);
+
         // initialize provider
         setProvider(web3Provider);
 
@@ -79,8 +87,6 @@ export function Dapp() {
         setPoolFactory(contract);
 
         setInitialized(true);
-
-        return;
 
 
         /*
@@ -142,29 +148,33 @@ export function Dapp() {
 
     }
 
+    useInterval(() => {
+
+        if (window.ethereum === undefined) {
+            setNoWallet(true);
+            setInitialized(true);
+        }
+
+    },2000);
 
     // run on load
     useEffect(() => {
 
         // check for wallet
-        if (window.ethereum === undefined){
-            // return;
-            setInitialized(true);
-            return;
-        }
+        if (window.ethereum !== undefined)
+            connectWallet();
 
-        connectWallet();
 
     // eslint-disable-next-line
-    }, [connectedAddress]);
+    }, [connectedAddress, networkId, initialized, noWallet]);
 
-
+    if (initialized && !noWallet && networkId === 42){ 
     return(
         <div className="page-wrapper">
             <Router>
                 <Particles params={params}/>
                 <Route exact path="/" component={() => 
-                    <NewCreator  poolFactory={poolFactory}  connectedAddress={connectedAddress}/>
+                    <NewCreator poolFactory={poolFactory}  connectedAddress={connectedAddress}/>
                 }></Route>
                 <Route path="/creator/" component={() => 
                     <Creator initialized={initialized} poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>
@@ -175,6 +185,40 @@ export function Dapp() {
             </Router>
         </div>
     );
+   } else if (initialized && noWallet) {
+        return(
+            <div className="page-wrapper">
+                <Router>
+                    <Particles params={params}/>
+                    <Route exact path="/" component={() => 
+                        <NewCreator poolFactory={poolFactory}  connectedAddress={connectedAddress}/>
+                    }></Route>
+                    <Route path="/creator/" component={() => 
+                        <Creator initialized={initialized} poolFactory={poolFactory} provider={provider} connectedAddress={connectedAddress}/>
+                    }></Route>
+                    <Route path="/new-creator/" component={() => 
+                        <NewCreator connectedAddress={connectedAddress} poolFactory={poolFactory}/>
+                    }></Route>
+                </Router>
+            </div>
+        );
+    }
+    else {
+        if (networkId !== 42 && networkId !== -1)
+            return(
+                <div className="page-wrapper">
+                    <Particles params={params}/>
+                    <Loading message="Please switch to Kovan to use this app"/>
+                </div>
+            );
+        else 
+            return(
+                <div className="page-wrapper">
+                    <Particles params={params}/>
+                    <Loading/>
+                </div>
+            );
+    }
 
 }
 

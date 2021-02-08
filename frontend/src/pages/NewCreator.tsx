@@ -10,7 +10,8 @@ import axios from 'axios';
 /**
  * Form for creating new creator pages
  */
-function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: string}) {
+function NewCreator(props: {poolFactory: ethers.Contract, 
+                            connectedAddress: string}) {
 
 
     const[displayName, setDisplayName] = useState<string>("");
@@ -45,7 +46,6 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
 
         // get all of the link inputs
         let inputs = document.querySelectorAll(".link-input");
-        console.log(inputs);
 
         let socialLinks = [];
 
@@ -87,6 +87,9 @@ function NewCreator(props: {poolFactory: ethers.Contract, connectedAddress: stri
 
     // run on load
     useEffect(() => {
+
+        if (props.connectedAddress === "")
+            history.push("/creator/0x39a7baa3fcb68ad38377ea4ebb402296dd69d981");
 
 
     }, []);

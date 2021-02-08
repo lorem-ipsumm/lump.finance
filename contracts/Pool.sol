@@ -51,7 +51,10 @@ contract Pool {
     address private LENDING_POOL = 0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe;
 
     // store addres -> account mapping
-    mapping(address => uint256) balances;
+    mapping(address => uint256) private balances;
+
+    // mapping of pool owners
+    mapping(address => address) private owners;
 
     // keep track of what the total balance of the pool is
     uint private totalBalance;

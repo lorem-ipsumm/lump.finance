@@ -122,6 +122,10 @@
 
     .creator-links {
         flex: 1;
+    
+        .middle-text {
+           min-width: 250px;
+        }
         
     }
 

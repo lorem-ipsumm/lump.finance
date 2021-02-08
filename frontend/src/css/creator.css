@@ -172,6 +172,10 @@
           flex: 1;
 }
 
+.creator-middle .creator-links .middle-text {
+  min-width: 250px;
+}
+
 .creator-middle .creator-explain {
   -webkit-box-flex: 2;
       -ms-flex: 2;

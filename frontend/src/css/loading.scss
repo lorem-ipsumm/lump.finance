@@ -13,6 +13,10 @@
   flex-direction: column;
   animation: zoom-in 1s ease;
   // animation-iteration-count: infinite;
+
+  &.stretch {
+    width: auto;
+  }
 }
   
   .loading-container {
@@ -48,6 +52,11 @@
         -ms-flex-pack: center;
             justify-content: center;
     height: 30px;
+
+    &.stretch{
+      width: 500px;
+    }
+
   }
 
   .loading span {

@@ -23,6 +23,10 @@
           animation: zoom-in 1s ease;
 }
 
+.loading-wrapper.stretch {
+  width: auto;
+}
+
 .loading-container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -55,6 +59,10 @@
   -ms-flex-pack: center;
   justify-content: center;
   height: 30px;
+}
+
+.loading.stretch {
+  width: 500px;
 }
 
 .loading span {

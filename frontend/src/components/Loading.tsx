@@ -1,13 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../css/loading.css";
 
 /**
  * Loading screen
  */
-export default function Loading() {
+export default function Loading(props: {message?: string}) {
+
+    const[loadingMessage, setLoadingMessage] = useState<string>("Loading");
+
+
 
 
     useEffect(() => {
+
+        if (props.message)
+            setLoadingMessage(props.message);
 
         let timer = setTimeout(() => {
 
@@ -20,25 +27,37 @@ export default function Loading() {
 
         }, 5000);
 
-
         // runs on component unmount
         return(() => {
             // stop timer
             clearTimeout(timer);
         });
 
-    }, []);
+    }, [props.message]);
 
-    return (
-        <div className="loading-wrapper page-wrapper">
-            <div className="loading">
-                <span>Loading</span>
-            </div>
+    if (loadingMessage)
+        return (
+            <div className="loading-wrapper page-wrapper stretch">
+                <div className="loading">
+                    <span>{loadingMessage}</span>
+                </div>
 
-            <div className="loading-message">
-                <span>This is taking a while... If this cotinues try refreshing the page.</span>
-            </div>
-        </div> 
-    );
+                <div className="loading-message">
+                    <span>This is taking a while... If this cotinues try refreshing the page.</span>
+                </div>
+            </div> 
+        );
+    else 
+        return (
+            <div className="loading-wrapper page-wrapper">
+                <div className="loading">
+                    <span>{loadingMessage}</span>
+                </div>
+
+                <div className="loading-message">
+                    <span>This is taking a while... If this cotinues try refreshing the page.</span>
+                </div>
+            </div> 
+        );
 }
 

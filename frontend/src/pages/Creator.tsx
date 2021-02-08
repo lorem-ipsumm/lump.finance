@@ -41,10 +41,10 @@ function Creator(props: {poolFactory: ethers.Contract,
     const[poolAddress, setPoolAddress] = useState<string>("");
     const[isOwner, setIsOwner] = useState<boolean>(false);
     const[creatorBalance, setCreatorBalance] = useState<number>(0); 
+    const[networkId, setNetworkId] = useState<number>(-1);
     const history = useHistory();
 
     async function initialize() {
-
 
         if (props.initialized === false)
             return;
@@ -52,10 +52,19 @@ function Creator(props: {poolFactory: ethers.Contract,
         // no wallet connected
         if (props.provider === undefined) {
             // load the creator's data
-            getCreatorData();
+            await getCreatorData();
+            setDataLoaded(true);
             return;
         }
 
+        // load the creator's data
+        getCreatorData();
+
+        // set network ID
+        setNetworkId(props.provider._network.chainId);
+
+        if (poolAddress === "")
+            return;
 
         // get wallet balance in bigint format
         let bal = await props.provider.getBalance(props.connectedAddress);
@@ -64,10 +73,6 @@ function Creator(props: {poolFactory: ethers.Contract,
 
         if (pools.length === 0)
             return;
-
-
-        // get latest pool
-        let poolAddress = pools[pools.length - 1];
 
         // setup contract
         const contract = new ethers.Contract(
@@ -83,11 +88,10 @@ function Creator(props: {poolFactory: ethers.Contract,
         getPoolBalance(contract);
         getDepositBalance(contract);
 
+
         // convert to ETH and float then update state
         setWalletBalance(parseFloat(ethers.utils.formatEther(bal)));
 
-        // load the creator's data
-        getCreatorData();
 
     }
 
@@ -120,6 +124,8 @@ function Creator(props: {poolFactory: ethers.Contract,
 
         // set balance
         setPoolBalance(parseFloat(ethers.utils.formatEther(bal.toString())));
+
+        setDataLoaded(true);
 
     }
 
@@ -154,20 +160,16 @@ function Creator(props: {poolFactory: ethers.Contract,
           if (poolContract !== undefined) {
             getPoolBalance(poolContract);
             getDepositBalance(poolContract);
+          } else {
+              initialize();
           }
 
-    }, 2000)
+    }, 1000)
 
     // run on load
     useEffect(() => {
 
-        // loading too fast is kind of jarring
-        setTimeout(() => {
-            // initialize vars
-            initialize(); 
-        },1000);
-
-    }, [poolBalance]);
+    }, [poolBalance, networkId]);
 
     // get latest gas prices 
     async function getGasPrice(speed?: string) {
@@ -185,6 +187,7 @@ function Creator(props: {poolFactory: ethers.Contract,
     }
 
     // load the creator data from firebase
+    // returns address of creator
     function getCreatorData() {
 
         // get the deck id from the URL
@@ -223,7 +226,6 @@ function Creator(props: {poolFactory: ethers.Contract,
                 setPoolAddress(data.pool);
                 setLinks(data.links);
 
-                setDataLoaded(true);
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
@@ -232,7 +234,6 @@ function Creator(props: {poolFactory: ethers.Contract,
             console.log("Error getting document:", error);
         });
         
-
     }
 
 
@@ -362,9 +363,7 @@ function Creator(props: {poolFactory: ethers.Contract,
             </div>
         );
     } else {
-        return(
-           <Loading/> 
-        );
+        return(<Loading/>);
     }
     
 }
