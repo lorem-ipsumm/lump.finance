@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 // import DeckPreview from '../components/DeckPreview';
 // import Loading from './Loading';
 import "../css/main.css";
@@ -199,6 +199,7 @@ export function Dapp() {
                     <Route path="/new-creator/" component={() => 
                         <NewCreator connectedAddress={connectedAddress} poolFactory={poolFactory}/>
                     }></Route>
+                    <Link className="demo-link" to="/creator/0x39a7baa3fcb68ad38377ea4ebb402296dd69d981">Visit demo page (must be on Kovan)</Link>
                 </Router>
             </div>
         );

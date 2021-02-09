@@ -49,6 +49,13 @@ html {
   z-index: 2;
 }
 
+.demo-link {
+  position: absolute;
+  z-index: 5;
+  top: 30px;
+  color: black;
+}
+
 #tsparticles {
   position: absolute;
   width: 100%;
