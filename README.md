@@ -1,4 +1,4 @@
-## Lump.Finance
+## [Lump.Finance](https://lump.finance)
 
 This is a project for [EthGlobal Market Make Hackathon](https://marketmake.ethglobal.co/).
 
