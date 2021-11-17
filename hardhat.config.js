@@ -20,6 +20,11 @@ module.exports = {
       }
       */
     }, 
+    mainnet: {
+      chainId: 137,
+      url: 'https://polygon-rpc.com/',
+      accounts: [process.env.PRIVATE_KEY]
+    },
     kovan: {
       url: "https://kovan.infura.io/v3/73c8268a1cb9451182cf1e7319f1cc8f",
       accounts: [process.env.KOVAN_PRIVATE_KEY],

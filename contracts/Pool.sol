@@ -23,31 +23,12 @@ contract Pool {
     // aave lending pool interface
     ILendingPool aave;
 
-    // mainnet dai
-    // address public DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
-
-    // kovan DAI 
-    address private DAI = 0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD;
-
-    // kovan aDAI
+    // useful vars
+    address private DAI = 0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063;
+    address private USDC = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;
     address private aDAI = 0xdCf0aF9e59C002FA3AA091a46196b37530FD48a8;
-
-    // kovan USDC 
-    address private USDC = 0xdCFaB8057d08634279f8201b55d311c2a67897D2;
-
-    // kovan aUSDC
     address private aUSDC = 0xF9155b335FAa6C184aB2F2c4D5939d86268F3668;
-
-    // mainnet usdc 
-    // address private USDC = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
-
-    // mainnet aUSDC
-    // address private aUSDC = 0xBcca60bB61934080951369a648Fb03DF4F96263C;
-
-    // kovan/mainnet uniswap router
     address private UNISWAP_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
-
-    // kovan aave lending pool
     address private LENDING_POOL = 0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe;
 
     // store addres -> account mapping
@@ -58,7 +39,6 @@ contract Pool {
 
     // keep track of what the total balance of the pool is
     uint private totalBalance;
-
 
 
     /**

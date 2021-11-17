@@ -3,32 +3,20 @@
   height: auto;
   background-color: #EFEFEF;
   background: #DCDCDC;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.17);
-          box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.17);
-  -webkit-transition: all ease 0.3s;
+  flex-direction: column;
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.17);
   transition: all ease 0.3s;
   border-radius: 3px;
   overflow: hidden;
-  -webkit-animation: zoom-in 1s ease;
-          animation: zoom-in 1s ease;
+  animation: zoom-in 1s ease;
 }
 
 .creator-header {
   background-color: black;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   color: white;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   padding: 10px 30px;
   font-size: 15pt;
 }
@@ -40,23 +28,14 @@
 
 .creator-profile {
   background-color: white;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   padding: 20px;
 }
 
 .creator-profile .creator-info {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .creator-profile .creator-info .creator-name {
@@ -89,20 +68,13 @@
   height: 100px;
   border-radius: 100%;
   margin-right: 20px;
-  -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.57);
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.57);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.57);
 }
 
 .creator-middle {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  align-items: center;
+  justify-content: space-between;
   align-items: center;
   padding: 20px;
   padding-bottom: 50px;
@@ -110,19 +82,10 @@
 }
 
 .creator-middle .middle-section {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .creator-middle .middle-text {
@@ -130,12 +93,8 @@
   padding: 5px;
   min-height: 200px;
   max-height: 200px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
   margin: 0 15px;
   padding: 20px;
   color: #141414;
@@ -153,13 +112,8 @@
   list-style-type: none;
   text-decoration: underline;
   font-size: 12pt;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 }
 
 .creator-middle .middle-text ul li {
@@ -167,9 +121,7 @@
 }
 
 .creator-middle .creator-links {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 
 .creator-middle .creator-links .middle-text {
@@ -177,27 +129,16 @@
 }
 
 .creator-middle .creator-explain {
-  -webkit-box-flex: 2;
-      -ms-flex: 2;
-          flex: 2;
+  flex: 2;
 }
 
 .creator-actions {
   height: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
 
 .creator-actions.dark {
@@ -208,22 +149,16 @@
 }
 
 .creator-actions * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
   height: 45px;
 }
 
 .creator-actions .button-wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   width: 100%;
 }
 
 .creator-actions .input-wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   width: 100%;
   font-size: 100pt;
@@ -231,25 +166,19 @@
 
 .creator-actions .input-wrapper * {
   font-size: 13pt;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 
 .creator-actions button {
   border: none;
   color: white;
   font-size: 15pt;
-  -webkit-transition: all ease 0.1s;
   transition: all ease 0.1s;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 
 .creator-actions button:hover {
-  -webkit-filter: brightness(90%);
-          filter: brightness(90%);
+  filter: brightness(90%);
 }
 
 .creator-actions .btn-deposit {
@@ -261,18 +190,10 @@
 }
 
 .creator-actions .balance-amount {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 2;
-      -ms-flex: 2;
-          flex: 2;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex: 2;
+  justify-content: center;
+  align-items: center;
   background-color: #c8c8c8;
   text-decoration: underline;
   cursor: pointer;
@@ -286,29 +207,13 @@
   padding-left: 20px;
 }
 
-@-webkit-keyframes zoom-in {
-  from {
-    opacity: 0;
-    -webkit-transform: scale(0.95);
-            transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1);
-  }
-}
-
 @keyframes zoom-in {
   from {
     opacity: 0;
-    -webkit-transform: scale(0.95);
-            transform: scale(0.95);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
   }
 }
-/*# sourceMappingURL=creator.css.map */

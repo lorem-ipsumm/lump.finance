@@ -48,8 +48,8 @@ async function main() {
   console.log(`Cost: ${cost} ${ethers.constants.EtherSymbol}`);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(pool, "Pool");
-  saveFrontendFiles(poolFactory, "PoolFactory");
+  // saveFrontendFiles(pool, "Pool");
+  // saveFrontendFiles(poolFactory, "PoolFactory");
 }
 
 function saveFrontendFiles(contract, name) {

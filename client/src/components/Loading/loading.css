@@ -1,20 +1,13 @@
 .loading-wrapper {
-  display: -ms-flexbox;
-  display: relative;
-  background: rgba(0, 0, 0, 0.4);
-  box-shadow: 1px 1px 15px 5px rgba(0, 0, 0, 0.17);
-  padding: 2.5em;
+  display: flex;
   width: 171px;
-  height: 109px;
+  height: 50px;
   overflow: hidden;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  animation: zoom-in 1s ease;
-}
-
-.loading-wrapper.stretch {
-  width: auto;
+  width: 100%;
+  height: 100%;
 }
 
 .loading-container {
@@ -34,10 +27,10 @@
   align-items: center;
   justify-content: center;
   height: 30px;
-}
-
-.loading.stretch {
-  width: 500px;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 1px 1px 15px 5px rgba(0, 0, 0, 0.17);
+  padding: 20px;
+  animation: zoom-in 1s ease;
 }
 
 .loading span {
@@ -52,7 +45,7 @@
 }
 
 .loading:after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -5px;
   height: 3px;
